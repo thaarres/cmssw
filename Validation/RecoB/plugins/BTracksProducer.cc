@@ -93,10 +93,10 @@ class BTracksProducer : public edm::EDProducer
 		//Int_t numberVertexClassifier_;
 		edm::InputTag trackingTruth_;
 		// edm::InputTag svTagInfoProducer_;
-		edm::InputTag Tracks_;
+		edm::InputTag tracks_;
 		std::string dqmLabel;
 		edm::InputTag simG4_;
-
+	        bool allSim_;
 
 };
 
@@ -104,16 +104,22 @@ class BTracksProducer : public edm::EDProducer
 BTracksProducer::BTracksProducer(const edm::ParameterSet& config) : 
 trackclassifier_(config.getParameter<edm::ParameterSet>("trackConfig")),
 simG4_( config.getParameter<edm::InputTag>( "simG4" ) ),
-trackingTruth_(config.getUntrackedParameter<edm::InputTag> ( "trackingTruth" ))
+trackingTruth_(config.getUntrackedParameter<edm::InputTag> ( "trackingTruth" )),
+tracks_(config.getUntrackedParameter<edm::InputTag> ( "trackInputTag" )),
+allSim_(config.getUntrackedParameter<bool> ( "allSim" ))
 {
 
   produces<reco::TrackCollection>("bTracks");
   produces<reco::TrackCollection>("fakeTracks");
-
   produces<TrackingParticleCollection>("bTrackingParticles");
   produces<std::vector<SimTrack> >("bSimTracks");
   produces<TrackingParticleCollection>("bNotReconstructed");
   produces<std::vector<SimTrack> >("bNotReconstructed");
+  if(allSim_)
+  {
+    produces<TrackingParticleCollection>("all");
+    produces<std::vector<SimTrack> >("all");
+  }
 //  produces<std::vector<HepMC::GenParticle> >("bNotReconstructed");
 }
 
@@ -142,7 +148,7 @@ void BTracksProducer::produce(edm::Event& event, const edm::EventSetup& setup)
 	
   //get tracks collection
   edm::Handle<edm::View<reco::Track> > Tracks; 
-  event.getByLabel("generalTracks", Tracks);
+  event.getByLabel(tracks_, Tracks);
 	
   edm::ESHandle<TransientTrackBuilder> builder;
   setup.get<TransientTrackRecord>().get("TransientTrackBuilder", builder);
@@ -155,6 +161,8 @@ void BTracksProducer::produce(edm::Event& event, const edm::EventSetup& setup)
    auto_ptr<std::vector<SimTrack> > bNotReconstructedST(new std::vector<SimTrack>);
    auto_ptr<TrackingParticleCollection> bRecoedTP(new TrackingParticleCollection);
    auto_ptr<std::vector<SimTrack> > bRecoedST(new std::vector<SimTrack>);
+   auto_ptr<TrackingParticleCollection> allTP(new TrackingParticleCollection);
+   auto_ptr<std::vector<SimTrack> > allST(new std::vector<SimTrack>);
   
  auto_ptr<reco::GenParticleCollection> bNotReconstructedGP(new reco::GenParticleCollection);
 
@@ -168,6 +176,15 @@ void BTracksProducer::produce(edm::Event& event, const edm::EventSetup& setup)
 	if (trackclassifier_.is(TrackCategories::Fake) ) {
 	  std::cout<<trkID.key()<< " is fake" << std::endl;  	
 	  fakeTracks->push_back(*trkID);
+	}
+        else
+        {
+		TrackingParticleRef trackingParticle=trackclassifier_.history().simParticle();
+                allTP->push_back(*trackingParticle);
+                 for( TrackingParticle::g4t_iterator g4T=(*trackingParticle).g4Track_begin(); g4T != (*trackingParticle).g4Track_end(); ++g4T ){
+ 	                allST->push_back(*g4T);
+ 		}
+
 	}
 	if( trackclassifier_.is(TrackCategories::Bottom)){
 	  std::cout<<trkID.key()<< " is B" << trackclassifier_.is(TrackCategories::BWeakDecay) << std::endl;  	
@@ -230,6 +247,11 @@ void BTracksProducer::produce(edm::Event& event, const edm::EventSetup& setup)
      event.put(bRecoedTP, "bTrackingParticles");
      event.put(bRecoedST, "bSimTracks");
      event.put(bNotReconstructedST, "bNotReconstructed");
+  if(allSim_)
+  {
+    event.put(allTP,"all");
+    event.put(allST,"all");
+  }
 
 }
 
