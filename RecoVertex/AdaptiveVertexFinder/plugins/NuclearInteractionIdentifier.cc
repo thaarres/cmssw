@@ -89,14 +89,14 @@ void NuclearInteractionIdentifier::produce(edm::Event &event, const edm::EventSe
 	       unsigned int ntracks = sv.nTracks();
 	       float z=sv.position().z();
 	       float nctau=flightDistance2D/transverseBoost/0.05;  //number of c*taus
-	       float nctauK=flightDistance2D/transverseBoost/0.0268;  //number of c*taus
+	       float nctauK=flightDistance2D/transverseBoost/2.68;  //number of c*taus
                const reco::Vertex & extVertex = sv;
                GlobalVector vtxDir = GlobalVector(extVertex.p4().X(),extVertex.p4().Y(),extVertex.p4().Z());
 	       float deltaR = Geom::deltaR(extVertex.position() - pv.position(), vtxDir);
                std::cout << "Vtx id: " << ivtx <<" z: " << fabs(z) << " fdist: " << flightDistance2D << " nctau: " << nctau << " ntr: " << ntracks << " mass: " << mass << " nctauK: " << nctauK << " DR: " << deltaR << " charge prod: "<< (*sv.tracks_begin())->charge()*((*(sv.tracks_begin()+1))->charge()) << std::endl;
-	       if( (fabs(z) < 29 &&  flightDistance2D > 2.5 && nctau > 3 && ntracks > 2 )			
+	       if( (fabs(z) < 29 &&  flightDistance2D > 2.5 && nctau > 3 )			
                    or (fabs(z) < 29 &&  flightDistance2D > 2.0 && nctau > 5 && ntracks > 2 )
-                   or (fabs(z) < 29 &&  flightDistance2D > 2.0 && nctau > 3 && ntracks > 6)
+                   or (fabs(z) < 29 &&  flightDistance2D > 2.5 && flightDistance2D < 4 && nctau > 2 && ntracks >= 6 && mass > 4.2)
 		   or (fabs(mass-0.497) < 0.0150 && ntracks == 2 && (*sv.tracks_begin())->charge()*((*(sv.tracks_begin()+1))->charge()) <0 && nctauK < 2 && nctauK > 0.01 && deltaR < 0.01) // K0... TODO: check also opposite sign
 			) {
  			std::cout << "NI " << std::endl;
