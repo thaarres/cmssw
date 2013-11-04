@@ -50,6 +50,7 @@ class BTagAndFlavourFilter : public edm::EDFilter
 	        edm::InputTag jetTagInputTag;		
 		double threshold;
 		double ptThreshold;
+		bool isSignal;
 
 };
 
@@ -58,7 +59,8 @@ BTagAndFlavourFilter::BTagAndFlavourFilter(const edm::ParameterSet& pSet)  :
   jetMCSrc(pSet.getParameter<edm::InputTag>("jetMCSrc")),
   jetTagInputTag(pSet.getParameter<edm::InputTag>("jetTag")),
   threshold(pSet.getParameter<double>("minDiscr")),
-  ptThreshold(pSet.getParameter<double>("minPt"))
+  ptThreshold(pSet.getParameter<double>("minPt")),
+  isSignal(pSet.getParameter<bool>("isSignal"))
 {
 
 }
@@ -86,11 +88,20 @@ bool BTagAndFlavourFilter::filter(edm::Event& event, const edm::EventSetup& setu
     const reco::JetTagCollection & tagColl = *(tagHandle.product());
     for (JetTagCollection::const_iterator tagI = tagColl.begin();
          tagI != tagColl.end(); ++tagI) {
-	      if (flavours[tagI->first] != 5 && flavours[tagI->first] != 4 && tagI->second > threshold && tagI->first->pt() > ptThreshold) 
-        {
-		std::cout << "Jet number " << tagI->first.key() << " pt  " << tagI->first->pt() << std::endl;  
+	if(!isSignal){
+	      if( (flavours[tagI->first] == 1 || flavours[tagI->first] == 2 || flavours[tagI->first] == 3 || flavours[tagI->first] == 21 ) && tagI->second > threshold && tagI->first->pt() > ptThreshold) 
+	       {
+		std::cout << "Jet number " << tagI->first.key() << " pt  " << tagI->first->pt() << " discr " << tagI->second << std::endl;  
                return true;
-        }
+        	}
+	} else {
+	      if (flavours[tagI->first] == 5 && tagI->second < threshold && tagI->first->pt() > ptThreshold)
+               {
+                std::cout << "BJet number " << tagI->first.key() << " pt  " << tagI->first->pt() << " discr " << tagI->second <<  std::endl;
+               return true;
+                }
+
+	}
     }
 
  return false;
