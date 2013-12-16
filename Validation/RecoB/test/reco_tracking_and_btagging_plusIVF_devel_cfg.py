@@ -157,6 +157,9 @@ process.impactParameterTagInfos.selectTracksFromExternalSV = cms.bool(True)
 process.cleanedImpactParameterTagInfos.extSVCollection = cms.InputTag("inclusiveMergedVertices2")
 process.cleanedImpactParameterTagInfos.selectTracksFromExternalSV = cms.bool(True)
 
+process.inclusiveSecondaryVertexFinderTagInfos.vertexCuts.distVal2dMax = 8
+process.cleanedInclusiveSecondaryVertexFinderTagInfos.vertexCuts.distVal2dMax = 8
+
 #redo tracking + nominal btagging (with IVF used in IP TagInfo too) + NI-cleaned btagging
 process.reco = cms.Sequence(process.siPixelRecHits+process.siStripMatchedRecHits+process.pixelTracks+process.ckftracks_wodEdX+process.offlinePrimaryVertices+process.ak5JetTracksAssociatorAtVertex+process.inclusiveVertexing+process.btagging  * process.inclusiveSecondaryVertexFinderTagInfos * process.combinedInclusiveSecondaryVertexBJetTags * process.nuclearInteractionIdentifier * process.cleanedInclusiveMergedVertices * process.trackCollectionCleaner * process.offlinePrimaryVertices2 * process.inclusiveVertexing2 * process.ak5JetCleanedTracksAssociatorAtVertex * process.cleanedImpactParameterTagInfos * process.cleanedInclusiveSecondaryVertexFinderTagInfos * process.cleanedCombinedInclusiveSecondaryVertexBJetTags)
 
