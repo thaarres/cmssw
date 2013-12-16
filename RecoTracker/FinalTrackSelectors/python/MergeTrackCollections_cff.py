@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 import RecoTracker.FinalTrackSelectors.trackListMerger_cfi
 generalTracks = RecoTracker.FinalTrackSelectors.trackListMerger_cfi.trackListMerger.clone(
     TrackProducers = (cms.InputTag('initialStepTracks'),
-		      cms.InputTag('jetCoreRegionalStepTracks'),	
+                      cms.InputTag('jetCoreRegionalStepTracks'),	
                       cms.InputTag('lowPtTripletStepTracks'),
                       cms.InputTag('pixelPairStepTracks'),
                       cms.InputTag('detachedTripletStepTracks'),
