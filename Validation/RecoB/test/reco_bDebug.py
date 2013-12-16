@@ -4,7 +4,7 @@
 
 import FWCore.ParameterSet.Config as cms
 
-process = cms.Process("validation")
+process = cms.Process("validationdebug")
 process.load("DQMServices.Components.DQMEnvironment_cfi")
 
 #keep the logging output to a nice level
@@ -102,18 +102,10 @@ process.bTracksProducerSV4.trackConfig.trackProducer = cms.untracked.InputTag("v
 
 #process.p = cms.Path(process.allBParticles * process.bParticlesFilter* process.cParticlesFilter* process.bTracksProducer * process.myPartons* process.AK5Flavour * process.btagging * process.inclusiveVertexing * process.inclusiveSecondaryVertexFinderTagInfos * process.combinedInclusiveSecondaryVertexBJetTags)
 #process.p = cms.Path(process.allBParticles * process.bParticlesFilter * process.cParticlesFilter * process.myPartons* process.AK5Flavour * process.btagging * process.inclusiveVertexing * process.inclusiveSecondaryVertexFinderTagInfos * process.combinedInclusiveSecondaryVertexBJetTags *  process.bTracksProducer * process.vertexSplitter * process.bTracksProducerSV0 * process.bTracksProducerSV1 * process.bTracksProducerSV2 * process.bTracksProducerSV3 * process.bTracksProducerSV4 )
-process.pfake = cms.Path(process.allBParticles *  process.cParticlesFilter * process.myPartons* process.AK5Flavour * process.btagging * process.inclusiveVertexing * process.inclusiveSecondaryVertexFinderTagInfos * process.combinedInclusiveSecondaryVertexBJetTags * process.btagNonBFilter *  process.bTracksProducer * process.vertexSplitter * process.bTracksProducerSV0 * process.bTracksProducerSV1 * process.bTracksProducerSV2 * process.bTracksProducerSV3 * process.bTracksProducerSV4 )
+process.pfake = cms.Path(process.allBParticles *  process.cParticlesFilter * process.myPartons* process.AK5Flavour * process.btagging * process.inclusiveVertexing * process.inclusiveSecondaryVertexFinderTagInfos * process.combinedInclusiveSecondaryVertexBJetTags  *  process.bTracksProducer * process.vertexSplitter * process.bTracksProducerSV0 * process.bTracksProducerSV1 * process.bTracksProducerSV2 * process.bTracksProducerSV3 * process.bTracksProducerSV4 )
 
 process.PoolSource.fileNames = [
-"file:/networkdata/arizzi/TTBARRECODEBUG/0AB9E748-4425-E211-820C-00266CFFB1F4.root",
-"file:/networkdata/arizzi/TTBARRECODEBUG/0C28F18B-F425-E211-8D5B-0030487F91DB.root",
-"file:/networkdata/arizzi/TTBARRECODEBUG/0C2F71CC-5A25-E211-8EC5-002481E0D2E8.root",
-"file:/networkdata/arizzi/TTBARRECODEBUG/0C3CAD7A-6D25-E211-8102-0030487D7103.root",
-"file:/networkdata/arizzi/TTBARRECODEBUG/0C58EF24-5625-E211-9B9A-003048D47912.root",
-"file:/networkdata/arizzi/TTBARRECODEBUG/0C5AFABC-6025-E211-9ADE-0025901D4844.root",
-"file:/networkdata/arizzi/TTBARRECODEBUG/0C661F5B-5A25-E211-8BD6-003048F0EBB8.root",
-"file:/networkdata/arizzi/TTBARRECODEBUG/0CF054DC-5F25-E211-B6B2-003048C66184.root",
-"file:/networkdata/arizzi/TTBARRECODEBUG/0E3EE564-5625-E211-8E37-0030487D5EA7.root"
+"file:trk.root"
 ]
 aa=[
 "file:/networkdata/cvernier/validation_533/CMSSW_5_3_3_patch2/src/Validation/RecoB/00020B8A-DCF3-E111-B63E-00266CF33340.root",
