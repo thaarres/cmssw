@@ -169,7 +169,7 @@ JetTagMVAExtractor::Tree::Tree(const JetTagMVAExtractor &main, Index index) :
 	ROOTContextSentinel ctx;
 
 	Label label = main.calibrationLabels[index.index];
-if (index.flavour > 21) std::cout << index.flavour << std::endl;
+	if (index.flavour > 21) std::cout << index.flavour << std::endl;
 	std::string flavour = std::string("") + flavourMap[index.flavour];
 	file.reset(new TFile((label.label + "_" + flavour + ".root").c_str(), "RECREATE"));
 	file->cd();
@@ -178,26 +178,21 @@ if (index.flavour > 21) std::cout << index.flavour << std::endl;
 
 	tree->Branch("flavour", &this->flavour, "flavour/I");
 
-	for(std::vector<Label::Var>::const_iterator iter = label.variables.begin();
-	    iter != label.variables.end(); iter++) {
+	for(std::vector<Label::Var>::const_iterator iter = label.variables.begin(); iter != label.variables.end(); iter++) {
 		values[iter->id] = Value(iter->type, iter->multiple);
 		Value &value = values[iter->id];
 		const char *name = iter->id;
-
+		
 		if (iter->type == 'I' && !iter->multiple) {
-			tree->Branch(name, &value.sInt,
-			             (std::string(name) + "/I").c_str());
+			tree->Branch(name, &value.sInt, (std::string(name) + "/I").c_str());
 		} else if (iter->type == 'D' && !iter->multiple) {
-			tree->Branch(name, &value.sDouble,
-			             (std::string(name) + "/D").c_str());
+			tree->Branch(name, &value.sDouble, (std::string(name) + "/D").c_str());
 		} else if (iter->type == 'I' && iter->multiple) {
 			value.indirect = &value.vInt;
-			tree->Branch(name, "std::vector<int>",
-			             &value.indirect);
+			tree->Branch(name, "std::vector<int>", &value.indirect);
 		} else if (iter->type == 'D' && iter->multiple) {
 			value.indirect = &value.vDouble;
-			tree->Branch(name, "std::vector<double>",
-			             &value.indirect);
+			tree->Branch(name, "std::vector<double>", &value.indirect);
 		}
 	}
 }
@@ -222,25 +217,37 @@ JetTagMVAExtractor::Label::Label(const edm::ParameterSet &pset) :
 	std::copy(vars.begin(), vars.end(), std::back_inserter(variables));
 }
 
-JetTagMVAExtractor::Label::Var::Var(const std::string &name) :
+JetTagMVAExtractor::Label::Var::Var(const std::string &name) : 
 	id(name)
 {
 	TaggingVariableName tag = getTaggingVariableName(name);
 	if (tag == btau::lastTaggingVariable)
 		throw cms::Exception("UnknownTaggingVariable")
 			<< "Unknown tagging variable " << name << std::endl;
-
+ 
+	//numbering based on order in TaggingVariable.h!!!
 	multiple = ((int)tag >= (int)btau::trackMomentum &&
 	            (int)tag <= (int)btau::trackGhostTrackWeight) ||
 	           ((int)tag >= (int)btau::trackP0Par &&
-	            (int)tag <= (int)btau::algoDiscriminator);
+	            (int)tag <= (int)btau::trackNPixelHits) ||
+							(int)tag == (int)btau::algoDiscriminator;
 
 	type = (tag == btau::jetNTracks ||
 	        tag == btau::vertexCategory ||
 	        tag == btau::jetNSecondaryVertices ||
 	        tag == btau::vertexNTracks ||
 	        tag == btau::trackNTotalHits ||
-	        tag == btau::trackNPixelHits) ? 'I' : 'D';
+	        tag == btau::trackNPixelHits ||
+					tag == btau::jetNTracks ||
+					tag == btau::chargedHadronMultiplicity ||
+					tag == btau::neutralHadronMultiplicity ||
+					tag == btau::photonMultiplicity ||
+					tag == btau::electronMultiplicity ||
+					tag == btau::muonMultiplicity ||
+					tag == btau::hadronMultiplicity ||
+					tag == btau::hadronPhotonMultiplicity ||
+					tag == btau::totalMultiplicity
+					) ? 'I' : 'D';
 }
 
 static const Calibration::MVAComputer *dummyCalib()
@@ -296,10 +303,8 @@ JetTagMVAExtractor::JetTagMVAExtractor(const edm::ParameterSet &params) :
 		throw cms::Exception("MismatchVariables")
 			<< "Label variables mismatch." << std::endl;
 
-	for(std::vector<std::string>::const_iterator iter = labels.begin();
-	    iter != labels.end(); iter++) {
-		std::map<std::string, Label>::const_iterator pos =
-							labelMap.find(*iter);
+	for(std::vector<std::string>::const_iterator iter = labels.begin(); iter != labels.end(); iter++) {
+		std::map<std::string, Label>::const_iterator pos = labelMap.find(*iter);
 		if (pos == labelMap.end())
 			throw cms::Exception("MismatchVariables")
 				<< "Variables definition for " << *iter
@@ -311,10 +316,8 @@ JetTagMVAExtractor::JetTagMVAExtractor(const edm::ParameterSet &params) :
 	std::vector<std::string> inputTags =
 			params.getParameterNamesForType<edm::InputTag>();
 
-	for(std::vector<std::string>::const_iterator iter = inputTags.begin();
-	    iter != inputTags.end(); iter++)
-		tagInfoLabels[*iter] =
-				params.getParameter<edm::InputTag>(*iter);
+	for(std::vector<std::string>::const_iterator iter = inputTags.begin(); iter != inputTags.end(); iter++)
+		tagInfoLabels[*iter] = params.getParameter<edm::InputTag>(*iter);
 }
 
 JetTagMVAExtractor::~JetTagMVAExtractor()
@@ -358,15 +361,12 @@ namespace {
 	};
 }
 
-void JetTagMVAExtractor::analyze(const edm::Event& event,
-                                 const edm::EventSetup& es)
+void JetTagMVAExtractor::analyze(const edm::Event& event, const edm::EventSetup& es)
 {
 	// retrieve JetTagComputer
 	edm::ESHandle<JetTagComputer> computerHandle;
 	es.get<JetTagComputerRecord>().get(jetTagComputer, computerHandle);
-	const GenericMVAJetTagComputer *computer =
-			dynamic_cast<const GenericMVAJetTagComputer*>(
-						computerHandle.product());
+	const GenericMVAJetTagComputer *computer = dynamic_cast<const GenericMVAJetTagComputer*>(computerHandle.product());
 	if (!computer)
 		throw cms::Exception("InvalidCast")
 			<< "JetTagComputer is not a MVAJetTagComputer "
@@ -387,14 +387,11 @@ void JetTagMVAExtractor::analyze(const edm::Event& event,
 					tagInfoHandles(tagInfos.size());
 	unsigned int nTagInfos = tagInfos.size();
 	for(unsigned int i = 0; i < nTagInfos; i++) {
-		edm::Handle< edm::View<BaseTagInfo> > &tagInfoHandle =
-							tagInfoHandles[i];
+		edm::Handle< edm::View<BaseTagInfo> > &tagInfoHandle = tagInfoHandles[i];
 		event.getByLabel(tagInfos[i], tagInfoHandle);
 
 		int j = 0;
-		for(edm::View<BaseTagInfo>::const_iterator iter =
-			tagInfoHandle->begin();
-				iter != tagInfoHandle->end(); iter++, j++) {
+		for(edm::View<BaseTagInfo>::const_iterator iter = tagInfoHandle->begin(); iter != tagInfoHandle->end(); iter++, j++) {
 
 			JetInfo &jetInfo = jetInfos[iter->jet()];
 			if (jetInfo.tagInfos.empty()) {
@@ -410,14 +407,11 @@ void JetTagMVAExtractor::analyze(const edm::Event& event,
 	edm::Handle<JetFlavourMatchingCollection> jetFlavourHandle;
 	event.getByLabel(jetFlavour, jetFlavourHandle);
 
-	for(JetFlavourMatchingCollection::const_iterator iter =
-		jetFlavourHandle->begin();
-				iter != jetFlavourHandle->end(); iter++) {
+	for(JetFlavourMatchingCollection::const_iterator iter = jetFlavourHandle->begin(); iter != jetFlavourHandle->end(); iter++) {
 
 		JetInfoMap::iterator pos = jetInfos.find(iter->first);
 		if (pos != jetInfos.end())
-			pos->second.flavour =
-					std::abs(iter->second.getFlavour());
+			pos->second.flavour = std::abs(iter->second.getFlavour());
 	}
 
 	// cached array containing MVAComputer value list
@@ -426,15 +420,12 @@ void JetTagMVAExtractor::analyze(const edm::Event& event,
 	values.push_back(Variable::Value(kJetEta, 0));
 
 	// now loop over the map and compute all JetTags
-	for(JetInfoMap::const_iterator iter = jetInfos.begin();
-	    iter != jetInfos.end(); iter++) {
+	for(JetInfoMap::const_iterator iter = jetInfos.begin(); iter != jetInfos.end(); iter++) {
 		edm::RefToBase<Jet> jet = iter->first;
 		const JetInfo &info = iter->second;
 
 		// simple jet filter
-		if (jet->pt() < minPt ||
-		    std::abs(jet->eta()) < minEta ||
-		    std::abs(jet->eta()) > maxEta)
+		if (jet->pt() < minPt || std::abs(jet->eta()) < minEta || std::abs(jet->eta()) > maxEta)
 			continue;
 
 		// do not train with unknown jet flavours
@@ -452,8 +443,7 @@ void JetTagMVAExtractor::analyze(const edm::Event& event,
 		}
 		JetTagComputer::TagInfoHelper helper(tagInfoPtrs);
 
-		TaggingVariableList variables =
-					computer->taggingVariables(helper);
+		TaggingVariableList variables = computer->taggingVariables(helper);
 
 		// retrieve index of computer in case categories are used
 		int index = 0;
@@ -463,14 +453,21 @@ void JetTagMVAExtractor::analyze(const edm::Event& event,
 				continue;
 		}
 
-		// composite full array of MVAComputer values
+		// compose full array of MVAComputer values
 		values.resize(2 + variables.size());
-		std::vector<Variable::Value>::iterator insert = values.begin();
 
-		(insert++)->setValue(jet->pt());
-		(insert++)->setValue(jet->eta());
-		std::copy(mvaComputer.iterator(variables.begin()),
-		          mvaComputer.iterator(variables.end()), insert);
+		values[0].setName("jetPt");
+		values[0].setValue(jet->pt());
+		values[1].setName("jetEta");
+		values[1].setValue(jet->eta());
+		
+		int i = 2;
+		for(TaggingVariableList::const_iterator iter = variables.begin(); iter != variables.end(); iter++) 	
+		{			
+			values[i].setName(TaggingVariableTokens[iter->first]);
+			values[i].setValue(iter->second);
+			i++;
+		}
 
 		process(Index(info.flavour, index), values);
 	}
@@ -478,8 +475,7 @@ void JetTagMVAExtractor::analyze(const edm::Event& event,
 
 void JetTagMVAExtractor::process(Index index, const Values &values)
 {
-	if (index.flavour == 7)
-		index.flavour = 5;
+	if (index.flavour == 7) index.flavour = 5;
 
 	std::map<Index, boost::shared_ptr<Tree> >::iterator pos = treeMap.find(index);
 	Tree *tree;
@@ -489,20 +485,15 @@ void JetTagMVAExtractor::process(Index index, const Values &values)
 	else
 		tree = pos->second.get();
 
-	if (!tree->tree)
-		return;
+	if (!tree->tree) return;
 
-	for(std::map<AtomicId, Tree::Value>::iterator iter = tree->values.begin();
-	    iter != tree->values.end(); iter++)
+	for(std::map<AtomicId, Tree::Value>::iterator iter = tree->values.begin(); iter != tree->values.end(); iter++)
 		iter->second.clear();
 
-	for(Values::const_iterator iter = values.begin();
-	    iter != values.end(); iter++) {
+	for(Values::const_iterator iter = values.begin(); iter != values.end(); iter++) {
 		std::map<AtomicId, Tree::Value>::iterator pos = tree->values.find(iter->getName());
 		if (pos == tree->values.end())
-			throw cms::Exception("VarNotFound")
-				<< "Variable " << (const char*)iter->getName()
-				<< " not found." << std::endl;
+			throw cms::Exception("VarNotFound")	<< "Variable " << (const char*)iter->getName() << " not found." << std::endl;
 
 		pos->second.set(iter->getValue());
 	}

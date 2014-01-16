@@ -8,38 +8,28 @@ process.source = cms.Source("EmptySource")
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1) )
 
 process.calib = cms.ESSource("BTauGenericMVAJetTagComputerFileSource",
-#	ImpactParameterMVA = cms.string('ImpactParameterMVA.mva'), 
-	CombinedMVA = cms.string('CombinedMVA.mva'),
-	CombinedSVRecoVertex = cms.string('CombinedSVRecoVertex.mva'), 
-	CombinedSVPseudoVertex = cms.string('CombinedSVPseudoVertex.mva'), 
-	CombinedSVNoVertex = cms.string('CombinedSVNoVertex.mva'), 
-	CombinedSVMVARecoVertex = cms.string('CombinedSVMVARecoVertex.mva'), 
-	CombinedSVMVAPseudoVertex = cms.string('CombinedSVMVAPseudoVertex.mva'), 
-	CombinedSVMVANoVertex = cms.string('CombinedSVMVANoVertex.mva'),
+	CombinedSVV2RecoVertex = cms.string('CombinedSVRecoVertex.mva'), 
+	CombinedSVV2PseudoVertex = cms.string('CombinedSVPseudoVertex.mva'), 
+	CombinedSVV2NoVertex = cms.string('CombinedSVNoVertex.mva'), 
 )
 
 process.PoolDBOutputService = cms.Service("PoolDBOutputService",
 	BlobStreamerName = cms.untracked.string('TBufferBlobStreamingService'),
 	DBParameters = cms.PSet( messageLevel = cms.untracked.int32(0) ),
 	timetype = cms.untracked.string('runnumber'),
-	connect = cms.string('sqlite_file:MVAJetTagsFakeConditions.db'),
+	connect = cms.string('sqlite_file:MVAJetTags.db'),
 	toPut = cms.VPSet(cms.PSet(
 		record = cms.string('BTauGenericMVAJetTagComputerRcd'),
-		tag = cms.string('MVAJetTags_CMSSW_2_2_X_mc')
+		tag = cms.string('MVAJetTags')
 	))
 )
 
-process.jetTagMVATrainerSave = cms.EDFilter("JetTagMVATrainerSave",
+process.jetTagMVATrainerSave = cms.EDAnalyzer("JetTagMVATrainerSave",
 	toPut = cms.vstring(),
 	toCopy = cms.vstring(
-#		'ImpactParameterMVA', 
-		'CombinedMVA', 
-		'CombinedSVRecoVertex', 
-		'CombinedSVPseudoVertex', 
-		'CombinedSVNoVertex', 
-		'CombinedSVMVARecoVertex', 
-		'CombinedSVMVAPseudoVertex', 
-		'CombinedSVMVANoVertex'
+		'CombinedSVV2RecoVertex', 
+		'CombinedSVV2PseudoVertex', 
+		'CombinedSVV2NoVertex', 
 	)
 )
 
