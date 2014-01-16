@@ -46,7 +46,8 @@ PVFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
  edm::Handle<reco::VertexCollection> pvHandle; 
  iEvent.getByLabel(primaryVertexCollection,pvHandle);
- 
+
+ // skips the event in case of an empty collection of PV 
  if(pvHandle->size()==0) {
    return false;
  }
