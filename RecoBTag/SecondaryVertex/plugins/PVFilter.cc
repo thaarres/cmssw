@@ -28,14 +28,12 @@ class PVFilter : public edm::EDFilter {
       edm::InputTag                           primaryVertexCollection;
 };
 
-
 PVFilter::PVFilter(const edm::ParameterSet& params):
       primaryVertexCollection(params.getParameter<edm::InputTag>("primaryVertices"))
 {
         produces<reco::VertexCollection>();
 
 }
-
 
 PVFilter::~PVFilter()
 {
