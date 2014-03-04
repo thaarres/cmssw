@@ -22,7 +22,9 @@
 //#include "RecoBTag/MCTools/interface/JetFlavour.h"
 #include "DataFormats/JetReco/interface/Jet.h"
 #include "FWCore/Utilities/interface/InputTag.h"
-#include "SimDataFormats/JetMatching/interface/JetFlavourMatching.h"
+//#include "SimDataFormats/JetMatching/interface/JetFlavourMatching.h"
+#include "SimDataFormats/JetMatching/interface/JetFlavourInfo.h"
+#include "SimDataFormats/JetMatching/interface/JetFlavourInfoMatching.h"
 #include "SimDataFormats/JetMatching/interface/JetFlavour.h"
 
 #include "DQMOffline/RecoB/interface/CorrectJet.h"

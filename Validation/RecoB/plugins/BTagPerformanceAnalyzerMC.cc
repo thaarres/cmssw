@@ -265,17 +265,21 @@ void BTagPerformanceAnalyzerMC::analyze(const edm::Event& iEvent, const edm::Eve
 
   if (finalizeOnly) return;
 
-  edm::Handle<JetFlavourMatchingCollection> jetMC;
+//  edm::Handle<JetFlavourMatchingCollection> jetMC;
+  edm::Handle<JetFlavourInfoMatchingCollection> jetMC;
   FlavourMap flavours;
   LeptonMap leptons;
 
   iEvent.getByLabel(jetMCSrc, jetMC);
-  for (JetFlavourMatchingCollection::const_iterator iter = jetMC->begin();
+//  for (JetFlavourMatchingCollection::const_iterator iter = jetMC->begin();
+//       iter != jetMC->end(); ++iter) {
+  for (JetFlavourInfoMatchingCollection::const_iterator iter = jetMC->begin();
        iter != jetMC->end(); ++iter) {
-    unsigned int fl = std::abs(iter->second.getFlavour());
+//    unsigned int fl = std::abs(iter->second.getFlavour());
+    unsigned int fl = std::abs(iter->second.getPartonFlavour());
     flavours.insert(std::make_pair(iter->first, fl));
-    const reco::JetFlavour::Leptons &lep = iter->second.getLeptons();
-    leptons.insert(std::make_pair(iter->first, lep));
+//    const reco::JetFlavour::Leptons &lep = iter->second.getLeptons();
+//    leptons.insert(std::make_pair(iter->first, lep));
   }
 
   edm::Handle<reco::SoftLeptonTagInfoCollection> infoHandle;
@@ -448,12 +452,12 @@ void BTagPerformanceAnalyzerMC::analyze(const edm::Event& iEvent, const edm::Eve
       }
     }
   }
+
 }
 
 bool  BTagPerformanceAnalyzerMC::getJetWithFlavour(	edm::RefToBase<Jet> jetRef, FlavourMap flavours,
 	JetWithFlavour & jetWithFlavour, const edm::EventSetup & es)
 {
-
   edm::ProductID recProdId = jetRef.id();
   edm::ProductID refProdId = (flavours.begin() == flavours.end())
     ? recProdId
@@ -465,7 +469,7 @@ bool  BTagPerformanceAnalyzerMC::getJetWithFlavour(	edm::RefToBase<Jet> jetRef, 
       edm::RefToBaseVector<Jet> refJets;
       for(FlavourMap::const_iterator iter = flavours.begin();
           iter != flavours.end(); ++iter)
-        refJets.push_back(iter->first);
+        refJets.push_back(edm::RefToBase<Jet>(iter->first));
       const edm::RefToBaseProd<Jet> recJetsProd(jetRef);
       edm::RefToBaseVector<Jet> recJets;
       for(unsigned int i = 0; i < recJetsProd->size(); i++)
@@ -482,7 +486,6 @@ bool  BTagPerformanceAnalyzerMC::getJetWithFlavour(	edm::RefToBase<Jet> jetRef, 
   }
 
   jetWithFlavour.first = jetCorrector(*jetRef);
-
   jetWithFlavour.second = reco::JetFlavour(jetWithFlavour.first.p4(), math::XYZPoint (0,0,0), flavours[jetRef]);
 
   LogTrace("Info") << "Found jet with flavour "<<jetWithFlavour.second.getFlavour()<<endl;
