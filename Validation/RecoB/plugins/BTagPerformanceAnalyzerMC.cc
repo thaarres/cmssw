@@ -39,6 +39,7 @@ BTagPerformanceAnalyzerMC::BTagPerformanceAnalyzerMC(const edm::ParameterSet& pS
   finalize(pSet.getParameter< bool >("finalizePlots")),
   finalizeOnly(pSet.getParameter< bool >("finalizeOnly")),
   jetMCSrc(pSet.getParameter<edm::InputTag>("jetMCSrc")),
+  genJetsMatched(pSet.getParameter<edm::InputTag>("matchedGenJets")),
   slInfoTag(pSet.getParameter<edm::InputTag>("softLeptonInfo")),
   moduleConfig(pSet.getParameter< vector<edm::ParameterSet> >("tagConfig")),
   mcPlots_(pSet.getParameter< bool >("mcPlots")),
@@ -285,6 +286,12 @@ void BTagPerformanceAnalyzerMC::analyze(const edm::Event& iEvent, const edm::Eve
   edm::Handle<reco::SoftLeptonTagInfoCollection> infoHandle;
   iEvent.getByLabel(slInfoTag, infoHandle);
 
+
+	//retrieve the gen jets
+	edm::Handle<edm::Association<reco::GenJetCollection> > genJetMatch;
+	iEvent.getByLabel(genJetsMatched, genJetMatch);
+
+
 // Look first at the jetTags
 
   for (unsigned int iJetLabel = 0; iJetLabel != jetTagInputTags.size(); ++iJetLabel) {
@@ -297,6 +304,11 @@ void BTagPerformanceAnalyzerMC::analyze(const edm::Event& iEvent, const edm::Eve
     for (JetTagCollection::const_iterator tagI = tagColl.begin();
 	 tagI != tagColl.end(); ++tagI) {
       // Identify parton associated to jet.
+
+			reco::GenJetRef genjet = (*genJetMatch)[tagI->first];
+			// reject jets if they do not have a genJetMatch -> handle to avoid jets from PU
+			if (!genjet.isNonnull() || !genjet.isAvailable())
+				continue;
 
       /// needed for lepton specific plots
       if (flavours[tagI->first] == 5 &&
@@ -339,6 +351,11 @@ void BTagPerformanceAnalyzerMC::analyze(const edm::Event& iEvent, const edm::Eve
     int plotterSize = binTagCorrelationPlotters[iJetLabel].size();
     for (JetTagCollection::const_iterator tagI = tagColl1.begin(); tagI != tagColl1.end(); ++tagI) {
       
+			reco::GenJetRef genjet = (*genJetMatch)[tagI->first];
+			// reject jets if they do not have a genJetMatch -> handle to avoid jets from PU
+			if (!genjet.isNonnull() || !genjet.isAvailable())
+				continue;
+
       if (flavours[tagI->first] == 5 &&
           ((electronPlots && !leptons[tagI->first].electron) ||
            (muonPlots && !leptons[tagI->first].muon) ||
@@ -423,6 +440,12 @@ void BTagPerformanceAnalyzerMC::analyze(const edm::Event& iEvent, const edm::Eve
           throw cms::Exception("Configuration") << "TagInfos pointing to different jets." << endl;
         baseTagInfos[iTagInfo] = &baseTagInfo;
       }
+
+
+			reco::GenJetRef genjet = (*genJetMatch)[jetRef];
+			// reject jets if they do not have a genJetMatch -> handle to avoid jets from PU
+			if (!genjet.isNonnull() || !genjet.isAvailable())
+				continue;
 
       // Identify parton associated to jet.
 
