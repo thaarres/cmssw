@@ -6,12 +6,13 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
-#include "DQMOffline/RecoB/interface/BaseBTagPlotter.h"
 #include "DataFormats/Common/interface/Ref.h"
 #include "DataFormats/JetReco/interface/Jet.h"
 #include "DataFormats/JetReco/interface/CaloJet.h"
 #include "DataFormats/BTauReco/interface/JetTag.h"
 #include "DataFormats/TrackReco/interface/Track.h"
+#include "DataFormats/JetReco/interface/GenJetCollection.h"
+#include "DQMOffline/RecoB/interface/BaseBTagPlotter.h"
 #include "DQMOffline/RecoB/interface/BTagDifferentialPlot.h"
 #include "DQMOffline/RecoB/interface/AcceptJet.h"
 #include "DQMOffline/RecoB/interface/JetTagPlotter.h"
@@ -22,7 +23,9 @@
 //#include "RecoBTag/MCTools/interface/JetFlavour.h"
 #include "DataFormats/JetReco/interface/Jet.h"
 #include "FWCore/Utilities/interface/InputTag.h"
-#include "SimDataFormats/JetMatching/interface/JetFlavourMatching.h"
+//#include "SimDataFormats/JetMatching/interface/JetFlavourMatching.h"
+#include "SimDataFormats/JetMatching/interface/JetFlavourInfo.h"
+#include "SimDataFormats/JetMatching/interface/JetFlavourInfoMatching.h"
 #include "SimDataFormats/JetMatching/interface/JetFlavour.h"
 
 #include "DQMOffline/RecoB/interface/CorrectJet.h"
@@ -84,6 +87,7 @@ typedef std::map<edm::RefToBase<reco::Jet>, reco::JetFlavour::Leptons, JetRefCom
   bool finalize;
   bool finalizeOnly;
   edm::InputTag jetMCSrc;
+  edm::InputTag genJetsMatched;
   edm::InputTag slInfoTag;
 
   std::vector< std::vector<JetTagPlotter*> > binJetTagPlotters;
