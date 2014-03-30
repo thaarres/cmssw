@@ -167,10 +167,24 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 	vars.insert(btau::jetPt, jet->pt(), true);
 	vars.insert(btau::jetEta, jet->eta(), true);
 
-	if (ipInfo.tracks().size() < trackMultiplicityMin)
+	TrackKinematics jetKinematics;
+	
+	const edm::RefVector<TrackCollection> &jettracks = ipInfo.tracks();
+	std::vector<std::size_t> trackIndices = ipInfo.sortedIndexes(sortCriterium);
+  IterationRange range = flipIterate(trackIndices.size(), false);
+	range_for(i, range) {
+		std::size_t idx = trackIndices[i];
+		const TrackRef &trackRef = jettracks[idx];
+		const Track &track = *trackRef;
+		jetKinematics.add(track);
+	}	
+	vars.insert(btau::trackJetPt, jetKinematics.vectorSum().Pt(), true);
+
+
+	if (ipInfo.selectedTracks().size() < trackMultiplicityMin)
 		return vars;
 	
-	vars.insert(btau::jetNTracks, ipInfo.tracks().size(), true);
+	vars.insert(btau::jetNTracks, ipInfo.selectedTracks().size(), true);
 
 	TrackKinematics allKinematics;
 	TrackKinematics vertexKinematics;
@@ -183,7 +197,7 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 	unsigned int numberofvertextracks = 0;
 
 	//IF THERE ARE SECONDARY VERTICES THE JET FALLS IN THE RECOVERTEX CATEGORY
-	IterationRange range = flipIterate(svInfo.nVertices(), true);
+	range = flipIterate(svInfo.nVertices(), true);
 	range_for(i, range) {
 		if (vtx < 0) vtx = i; //RecoVertex category (vtx=0) if we enter at least one time in this loop!
 
@@ -441,7 +455,6 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 		vars.insert(btau::leptonSip3d,propertiesMuon.sip3d , true);	
 		vars.insert(btau::leptonDeltaR,propertiesMuon.deltaR , true);	
 		vars.insert(btau::leptonRatioRel,propertiesMuon.ratioRel , true);	
-		vars.insert(btau::leptonP0Par,propertiesMuon.p0Par , true);	
 		vars.insert(btau::leptonEtaRel,propertiesMuon.etaRel , true);	
 		vars.insert(btau::leptonRatio,propertiesMuon.ratio , true);	
 	}
