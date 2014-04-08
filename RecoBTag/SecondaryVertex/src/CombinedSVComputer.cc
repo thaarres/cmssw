@@ -158,7 +158,7 @@ CombinedSVComputer::operator () (const TrackIPTagInfo &ipInfo,
 	vars.insert(btau::jetPt, jet->pt(), true);
 	vars.insert(btau::jetEta, jet->eta(), true);
 
-	if (ipInfo.tracks().size() < trackMultiplicityMin)
+	if (ipInfo.selectedTracks().size() < trackMultiplicityMin)
 		return vars;
 
 	TrackKinematics allKinematics;
