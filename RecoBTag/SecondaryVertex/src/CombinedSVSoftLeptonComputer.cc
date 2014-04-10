@@ -169,7 +169,7 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 
 	TrackKinematics jetKinematics;
 	
-	const edm::RefVector<TrackCollection> &jettracks = ipInfo.tracks();
+	const edm::RefVector<TrackCollection> &jettracks = ipInfo.selectedTracks();
 	std::vector<std::size_t> trackIndices = ipInfo.sortedIndexes(sortCriterium);
   IterationRange range = flipIterate(trackIndices.size(), false);
 	range_for(i, range) {
@@ -179,7 +179,6 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 		jetKinematics.add(track);
 	}	
 	vars.insert(btau::trackJetPt, jetKinematics.vectorSum().Pt(), true);
-
 
 	if (ipInfo.selectedTracks().size() < trackMultiplicityMin)
 		return vars;

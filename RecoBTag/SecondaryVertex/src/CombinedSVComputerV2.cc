@@ -161,7 +161,7 @@ CombinedSVComputerV2::operator () (const TrackIPTagInfo &ipInfo,
 
 	TrackKinematics jetKinematics;
 	
-	const edm::RefVector<TrackCollection> &jettracks = ipInfo.tracks();
+	const edm::RefVector<TrackCollection> &jettracks = ipInfo.selectedTracks();
 	std::vector<std::size_t> trackIndices = ipInfo.sortedIndexes(sortCriterium);
   IterationRange range = flipIterate(trackIndices.size(), false);
 	range_for(i, range) {
