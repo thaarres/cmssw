@@ -150,8 +150,6 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 {
 	using namespace ROOT::Math;
 
-//	cout << "TaggingVariableList CombinedSVSoftLeptonComputer::operator ()" << endl;
-
 	edm::RefToBase<Jet> jet = ipInfo.jet();
 
 	math::XYZVector jetDir = jet->momentum().Unit();
@@ -167,26 +165,14 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 	vars.insert(btau::jetPt, jet->pt(), true);
 	vars.insert(btau::jetEta, jet->eta(), true);
 
-	TrackKinematics jetKinematics;
-	
-	const edm::RefVector<TrackCollection> &jettracks = ipInfo.selectedTracks();
-	std::vector<std::size_t> trackIndices = ipInfo.sortedIndexes(sortCriterium);
-  IterationRange range = flipIterate(trackIndices.size(), false);
-	range_for(i, range) {
-		std::size_t idx = trackIndices[i];
-		const TrackRef &trackRef = jettracks[idx];
-		const Track &track = *trackRef;
-		jetKinematics.add(track);
-	}	
-	vars.insert(btau::trackJetPt, jetKinematics.vectorSum().Pt(), true);
-
 	if (ipInfo.selectedTracks().size() < trackMultiplicityMin)
 		return vars;
-	
+
 	vars.insert(btau::jetNTracks, ipInfo.selectedTracks().size(), true);
 
 	TrackKinematics allKinematics;
 	TrackKinematics vertexKinematics;
+	TrackKinematics trackJetKinematics;
 
 	double vtx_track_ptSum= 0.; 
 	double vtx_track_ESum= 0.; 
@@ -196,12 +182,12 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 	unsigned int numberofvertextracks = 0;
 
 	//IF THERE ARE SECONDARY VERTICES THE JET FALLS IN THE RECOVERTEX CATEGORY
-	range = flipIterate(svInfo.nVertices(), true);
+	IterationRange range = flipIterate(svInfo.nVertices(), true);
 	range_for(i, range) {
 		if (vtx < 0) vtx = i; //RecoVertex category (vtx=0) if we enter at least one time in this loop!
 
 		numberofvertextracks = numberofvertextracks + (svInfo.secondaryVertex(i)).nTracks();
-			
+
 		const Vertex &vertex = svInfo.secondaryVertex(i);
 		bool hasRefittedTracks = vertex.hasRefittedTracks();
 		TrackRefVector tracks = svInfo.vertexTracks(i);
@@ -240,7 +226,6 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 		vars.insert(btau::flightDistance3dSig,flipValue(svInfo.flightDistance(vtx, false).significance(),true),true);
 		vars.insert(btau::vertexJetDeltaR,Geom::deltaR(svInfo.flightDirection(vtx), jetDir),true);
 		vars.insert(btau::jetNSecondaryVertices, svInfo.nVertices(), true);
-//		vars.insert(btau::vertexNTracks, svInfo.nVertexTracks(), true);
 		vars.insert(btau::vertexNTracks, numberofvertextracks, true);	
 		vars.insert(btau::vertexFitProb,(svInfo.secondaryVertex(vtx)).normalizedChi2(), true);
 	}
@@ -296,7 +281,7 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
  		jet_track_ESum += std::sqrt((track.momentum()).Mag2() + std::pow(ParticleMasses::piPlus,2)); 
 		// add track to kinematics for all tracks in jet
 		//allKinematics.add(track); //would make more sense for some variables, e.g. vertexEnergyRatio nicely between 0 and 1, but not necessarily the best option for the discriminating power...
-					
+
 		// filter tracks -> this track selection can be more tight (used to fill the track related variables...)
 		if (!trackSelector(track, data, *jet, pv))
 			continue;
@@ -325,9 +310,11 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 			break;
 			}
 		}
-		
+
 		if (!ok)
 			continue;
+
+		trackJetKinematics.add(track);
 
 		// add track variables
 		math::XYZVector trackMom = track.momentum();
@@ -346,6 +333,8 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 		vars.insert(btau::trackPtRatio, VectorUtil::Perp(trackMom, jetDir) / trackMag, true);
 		vars.insert(btau::trackPParRatio, jetDir.Dot(trackMom) / trackMag, true);
 	} 
+
+	vars.insert(btau::trackJetPt, trackJetKinematics.vectorSum().Pt(), true);
 
 	vars.insert(btau::trackSumJetDeltaR,VectorUtil::DeltaR(allKinematics.vectorSum(), jetDir), true);
 	vars.insert(btau::trackSumJetEtRatio,allKinematics.vectorSum().Et() / ipInfo.jet()->et(), true);
@@ -379,7 +368,7 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 		vars.insert(btau::massVertexEnergyFraction, varPi, true);
 		varB  = (std::sqrt(5.2794) * vtx_track_ptSum) / ( vertexMass * std::sqrt(jet->pt())); 
 		vars.insert(btau::vertexBoostOverSqrtJetPt,varB*varB/(varB*varB + 10.), true);
-		
+
 		if (allKinematics.numberOfTracks())
 			vars.insert(btau::vertexEnergyRatio, vertexSum.E() / allSum.E(), true);
 		else
@@ -401,21 +390,11 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 		vars.insert(btau::muonMultiplicity,pfJet->muonMultiplicity(), true);
 		vars.insert(btau::hadronMultiplicity,pfJet->chargedHadronMultiplicity()+pfJet->neutralHadronMultiplicity(), true);
 		vars.insert(btau::hadronPhotonMultiplicity,pfJet->chargedHadronMultiplicity()+pfJet->neutralHadronMultiplicity()+pfJet->photonMultiplicity(), true);
-			vars.insert(btau::totalMultiplicity,pfJet->chargedHadronMultiplicity()+pfJet->neutralHadronMultiplicity()+pfJet->photonMultiplicity()+pfJet->electronMultiplicity()+pfJet->muonMultiplicity(), true);
+		vars.insert(btau::totalMultiplicity,pfJet->chargedHadronMultiplicity()+pfJet->neutralHadronMultiplicity()+pfJet->photonMultiplicity()+pfJet->electronMultiplicity()+pfJet->muonMultiplicity(), true);
 
 	}
 	else if( patJet != 0)
 	{
-//		std::cout << "NEW JET - with partonFlavour " << patJet->partonFlavour() << std::endl;
-//		std::cout << " muonMultiplicity: "<< patJet->muonMultiplicity() << std::endl;
-		//if(muonInfo.leptons()!=0) 
-//		std::cout << " muonTagInfo size: "<< muonInfo.leptons() << std::endl;
-//		std::cout << "SAME JET - ELECTRONS " << std::endl;
-//		std::cout << " electronMultiplicity: "<< patJet->electronMultiplicity() << std::endl;
-// 		if(elecInfo.leptons()!=0) std::cout << " elecTagInfo size: "<< elecInfo.leptons() << std::endl;
-// 		if((unsigned int)elecInfo.leptons()!= (unsigned int)patJet->electronMultiplicity() ) std::cout << " elecTagInfo size: "<< elecInfo.leptons() << " and electronMultiplicity " << patJet->electronMultiplicity() << std::endl;
-// 		if(muonInfo.leptons()!=0) std::cout << " muonTagInfo size: "<< muonInfo.leptons() << std::endl;
-// 		if((unsigned int)muonInfo.leptons()!= (unsigned int)patJet->muonMultiplicity() ) std::cout << " muonTagInfo size: "<< muonInfo.leptons() << " and muonMultiplicity " << patJet->muonMultiplicity() << std::endl;
 		vars.insert(btau::chargedHadronEnergyFraction,patJet->chargedHadronEnergyFraction(), true);
 		vars.insert(btau::neutralHadronEnergyFraction,patJet->neutralHadronEnergyFraction(), true);
 		vars.insert(btau::photonEnergyFraction,patJet->photonEnergyFraction(), true);
@@ -428,8 +407,8 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 		vars.insert(btau::muonMultiplicity,patJet->muonMultiplicity(), true);
 		vars.insert(btau::hadronMultiplicity,patJet->chargedHadronMultiplicity()+patJet->neutralHadronMultiplicity(), true);
 		vars.insert(btau::hadronPhotonMultiplicity,patJet->chargedHadronMultiplicity()+patJet->neutralHadronMultiplicity()+patJet->photonMultiplicity(), true);
-			vars.insert(btau::totalMultiplicity,patJet->chargedHadronMultiplicity()+patJet->neutralHadronMultiplicity()+patJet->photonMultiplicity()+patJet->electronMultiplicity()+patJet->muonMultiplicity(), true);
-	
+		vars.insert(btau::totalMultiplicity,patJet->chargedHadronMultiplicity()+patJet->neutralHadronMultiplicity()+patJet->photonMultiplicity()+patJet->electronMultiplicity()+patJet->muonMultiplicity(), true);
+
 	}
 	else
 	{
@@ -438,49 +417,30 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 
 	int leptonCategory = 0; //0 = no lepton, 1 = muon, 2 = electron
 
-//	if(muonInfo.leptons()!=0) std::cout << " muonTagInfo size: "<< muonInfo.leptons() << std::endl;
-//	if(muonInfo.leptons()!=0) std::cout << " elecTagInfo size: "<< elecInfo.leptons() << std::endl;
 	for (unsigned int i = 0; i < muonInfo.leptons(); i++) {// loop over all muons, not optimal -> find the best or use ranking from best to worst
 		leptonCategory = 1; // muon category
 		const SoftLeptonProperties & propertiesMuon = muonInfo.properties(i);
-/* 		if(muonInfo.leptons()>1)
-		{
-			std::cout << " MUON " << i+1 << " ptrel: "<< propertiesMuon.ptRel << std::endl;
-			std::cout << " MUON " << i+1 << " sip3d: "<< propertiesMuon.sip3d << std::endl;
-			std::cout << " MUON " << i+1 << " deltaR: "<< propertiesMuon.deltaR << std::endl;
-			std::cout << " MUON " << i+1 << " ratioRel: "<< propertiesMuon.ratioRel << std::endl;
-		}
- */		vars.insert(btau::leptonPtRel,propertiesMuon.ptRel , true);	
+		vars.insert(btau::leptonPtRel,propertiesMuon.ptRel , true);	
 		vars.insert(btau::leptonSip3d,propertiesMuon.sip3d , true);	
 		vars.insert(btau::leptonDeltaR,propertiesMuon.deltaR , true);	
 		vars.insert(btau::leptonRatioRel,propertiesMuon.ratioRel , true);	
 		vars.insert(btau::leptonEtaRel,propertiesMuon.etaRel , true);	
 		vars.insert(btau::leptonRatio,propertiesMuon.ratio , true);	
 	}
-	
+
 	if(leptonCategory != 1){ //no soft muon found, try soft electron
 		for (unsigned int i = 0; i < elecInfo.leptons(); i++) { // loop over all electrons, not optimal -> find the best or use ranking from best to worst
 			leptonCategory = 2; // electron category
 			const SoftLeptonProperties & propertiesElec = elecInfo.properties(i);
-			//std::cout << " ELECTRON ptrel: " << propertiesElec.ptRel << std::endl;
-/* 		if(elecInfo.leptons()>1)
-		{
-			std::cout << " ELEC " << i+1 << " ptrel: "<< propertiesElec.ptRel << std::endl;
-			std::cout << " ELEC " << i+1 << " sip3d: "<< propertiesElec.sip3d << std::endl;
-			std::cout << " ELEC " << i+1 << " deltaR: "<< propertiesElec.deltaR << std::endl;
-			std::cout << " ELEC " << i+1 << " ratioRel: "<< propertiesElec.ratioRel << std::endl;
-		}
- */			vars.insert(btau::leptonPtRel,propertiesElec.ptRel , true);	
+			vars.insert(btau::leptonPtRel,propertiesElec.ptRel , true);	
 			vars.insert(btau::leptonSip3d,propertiesElec.sip3d , true);	
 			vars.insert(btau::leptonDeltaR,propertiesElec.deltaR , true);	
 			vars.insert(btau::leptonRatioRel,propertiesElec.ratioRel , true);	
-			vars.insert(btau::leptonP0Par,propertiesElec.p0Par , true);	
 			vars.insert(btau::leptonEtaRel,propertiesElec.etaRel , true);	
 			vars.insert(btau::leptonRatio,propertiesElec.ratio , true);	
 		}
 	}
-	
-//	cout << "leptonCategory " << leptonCategory << " and vertexCategory " << vtxType << endl;
+
 
 	//put default value for vertexLeptonCategory on 2 = NoVertexNoSoftLepton
 	int vertexLepCat = 2; 
@@ -488,39 +448,28 @@ CombinedSVSoftLeptonComputer::operator () (const TrackIPTagInfo &ipInfo,
 	if(leptonCategory == 0){ //  no soft lepton
   	if (vtxType == btag::Vertices::RecoVertex)
 			vertexLepCat = 0;
-  	if (vtxType == btag::Vertices::PseudoVertex)
+  	else if (vtxType == btag::Vertices::PseudoVertex)
 			vertexLepCat = 1;
-  	if (vtxType == btag::Vertices::NoVertex){
-//			cout << "here 1" << endl;
+  	else
 			vertexLepCat = 2;
-//			cout << "here 2" << endl;
-		}
 	} else if(leptonCategory == 1){ // soft muon
   	if (vtxType == btag::Vertices::RecoVertex)
 			vertexLepCat = 3;
-  	if (vtxType == btag::Vertices::PseudoVertex)
+  	else if(vtxType == btag::Vertices::PseudoVertex)
 			vertexLepCat = 4;
-  	if (vtxType == btag::Vertices::NoVertex){
-//			cout << "here 3" << endl;
-			vertexLepCat = 5;
-//			cout << "here 4" << endl;
-		}
+  	else 			vertexLepCat = 5;
 	} else if(leptonCategory == 2){ // soft electron	
   	if (vtxType == btag::Vertices::RecoVertex)
 			vertexLepCat = 6;
-  	if (vtxType == btag::Vertices::PseudoVertex)
+  	else if (vtxType == btag::Vertices::PseudoVertex)
 			vertexLepCat = 7;
-  	if (vtxType == btag::Vertices::NoVertex)
+  	else 
 			vertexLepCat = 8;
-	} else {
-		throw cms::Exception("InvalidConfiguration") << "From CombinedSVSoftLeptonComputer::operator: problem with soft lepton Category" << std::endl;	
 	}
-	
+
 	vars.insert(btau::vertexLeptonCategory, vertexLepCat , true);	
 
 	vars.finalize();
 
-//	cout << "CombinedSVSoftLeptonComputer: Variables were calculated!" << endl;
-	
 	return vars;
 }

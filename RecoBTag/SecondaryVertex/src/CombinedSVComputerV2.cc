@@ -159,26 +159,14 @@ CombinedSVComputerV2::operator () (const TrackIPTagInfo &ipInfo,
 	vars.insert(btau::jetPt, jet->pt(), true);
 	vars.insert(btau::jetEta, jet->eta(), true);
 
-	TrackKinematics jetKinematics;
-	
-	const edm::RefVector<TrackCollection> &jettracks = ipInfo.selectedTracks();
-	std::vector<std::size_t> trackIndices = ipInfo.sortedIndexes(sortCriterium);
-  IterationRange range = flipIterate(trackIndices.size(), false);
-	range_for(i, range) {
-		std::size_t idx = trackIndices[i];
-		const TrackRef &trackRef = jettracks[idx];
-		const Track &track = *trackRef;
-		jetKinematics.add(track);
-	}	
-	vars.insert(btau::trackJetPt, jetKinematics.vectorSum().Pt(), true);
-
 	if (ipInfo.selectedTracks().size() < trackMultiplicityMin)
 		return vars;
-	
+
 	vars.insert(btau::jetNTracks, ipInfo.selectedTracks().size(), true);
 
 	TrackKinematics allKinematics;
 	TrackKinematics vertexKinematics;
+	TrackKinematics trackJetKinematics;
 
 	double vtx_track_ptSum= 0.; 
 	double vtx_track_ESum= 0.; 
@@ -188,12 +176,12 @@ CombinedSVComputerV2::operator () (const TrackIPTagInfo &ipInfo,
 	unsigned int numberofvertextracks = 0;
 
 	//IF THERE ARE SECONDARY VERTICES THE JET FALLS IN THE RECOVERTEX CATEGORY
-	range = flipIterate(svInfo.nVertices(), true);
+	IterationRange range = flipIterate(svInfo.nVertices(), true);
 	range_for(i, range) {
 		if (vtx < 0) vtx = i; //RecoVertex category (vtx=0) if we enter at least one time in this loop!
 
 		numberofvertextracks = numberofvertextracks + (svInfo.secondaryVertex(i)).nTracks();
-			
+
 		const Vertex &vertex = svInfo.secondaryVertex(i);
 		bool hasRefittedTracks = vertex.hasRefittedTracks();
 		TrackRefVector tracks = svInfo.vertexTracks(i);
@@ -232,7 +220,6 @@ CombinedSVComputerV2::operator () (const TrackIPTagInfo &ipInfo,
 		vars.insert(btau::flightDistance3dSig,flipValue(svInfo.flightDistance(vtx, false).significance(),true),true);
 		vars.insert(btau::vertexJetDeltaR,Geom::deltaR(svInfo.flightDirection(vtx), jetDir),true);
 		vars.insert(btau::jetNSecondaryVertices, svInfo.nVertices(), true);
-//		vars.insert(btau::vertexNTracks, svInfo.nVertexTracks(), true);
 		vars.insert(btau::vertexNTracks, numberofvertextracks, true);	
 		vars.insert(btau::vertexFitProb,(svInfo.secondaryVertex(vtx)).normalizedChi2(), true);
 	}
@@ -288,7 +275,7 @@ CombinedSVComputerV2::operator () (const TrackIPTagInfo &ipInfo,
  		jet_track_ESum += std::sqrt((track.momentum()).Mag2() + std::pow(ParticleMasses::piPlus,2)); 
 		// add track to kinematics for all tracks in jet
 		//allKinematics.add(track); //would make more sense for some variables, e.g. vertexEnergyRatio nicely between 0 and 1, but not necessarily the best option for the discriminating power...
-					
+
 		// filter tracks -> this track selection can be more tight (used to fill the track related variables...)
 		if (!trackSelector(track, data, *jet, pv))
 			continue;
@@ -317,9 +304,12 @@ CombinedSVComputerV2::operator () (const TrackIPTagInfo &ipInfo,
 			break;
 			}
 		}
-		
+
 		if (!ok)
 			continue;
+
+		trackJetKinematics.add(track);
+
 
 		// add track variables
 		math::XYZVector trackMom = track.momentum();
@@ -337,7 +327,10 @@ CombinedSVComputerV2::operator () (const TrackIPTagInfo &ipInfo,
 		vars.insert(btau::trackDeltaR, VectorUtil::DeltaR(trackMom, jetDir), true);
 		vars.insert(btau::trackPtRatio, VectorUtil::Perp(trackMom, jetDir) / trackMag, true);
 		vars.insert(btau::trackPParRatio, jetDir.Dot(trackMom) / trackMag, true);
-	} 
+	}
+
+	vars.insert(btau::trackJetPt, trackJetKinematics.vectorSum().Pt(), true);
+
 
 	vars.insert(btau::trackSumJetDeltaR,VectorUtil::DeltaR(allKinematics.vectorSum(), jetDir), true);
 	vars.insert(btau::trackSumJetEtRatio,allKinematics.vectorSum().Et() / ipInfo.jet()->et(), true);
@@ -371,7 +364,7 @@ CombinedSVComputerV2::operator () (const TrackIPTagInfo &ipInfo,
 		vars.insert(btau::massVertexEnergyFraction, varPi, true);
 		varB  = (std::sqrt(5.2794) * vtx_track_ptSum) / ( vertexMass * std::sqrt(jet->pt())); 
 		vars.insert(btau::vertexBoostOverSqrtJetPt,varB*varB/(varB*varB + 10.), true);
-		
+
 		if (allKinematics.numberOfTracks())
 			vars.insert(btau::vertexEnergyRatio, vertexSum.E() / allSum.E(), true);
 		else
@@ -411,7 +404,7 @@ CombinedSVComputerV2::operator () (const TrackIPTagInfo &ipInfo,
 		vars.insert(btau::hadronMultiplicity,patJet->chargedHadronMultiplicity()+patJet->neutralHadronMultiplicity(), true);
 		vars.insert(btau::hadronPhotonMultiplicity,patJet->chargedHadronMultiplicity()+patJet->neutralHadronMultiplicity()+patJet->photonMultiplicity(), true);
 			vars.insert(btau::totalMultiplicity,patJet->chargedHadronMultiplicity()+patJet->neutralHadronMultiplicity()+patJet->photonMultiplicity()+patJet->electronMultiplicity()+patJet->muonMultiplicity(), true);
-	
+
 	}
 	else
 	{
