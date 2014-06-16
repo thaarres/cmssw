@@ -42,6 +42,7 @@ bTagCommonBlock = cms.PSet(
         mcSource = cms.string('source')
     ),
     jetMCSrc = cms.InputTag("mcJetFlavour"),
+		matchedGenJets = cms.InputTag("matchedAK5PFGenJets"),
     softLeptonInfo = cms.InputTag("softElectronTagInfos"),
     ptRanges = cms.vdouble(50.0, 80.0, 120.0),
     # eta and pt ranges

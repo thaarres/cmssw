@@ -35,7 +35,7 @@ _defaultBTagDiscriminators =['jetBProbabilityBJetTags'
                             ,'simpleSecondaryVertexHighPurBJetTags'
                             #,'simpleSecondaryVertexNegativeHighEffBJetTags'
                             #,'simpleSecondaryVertexNegativeHighPurBJetTags'
-                            ,'combinedSecondaryVertexBJetTags'
+                            #,'combinedSecondaryVertexBJetTags'
                             #,'combinedSecondaryVertexPositiveBJetTags'
                             #,'combinedSecondaryVertexV1BJetTags'
                             #,'combinedSecondaryVertexV1PositiveBJetTags'
@@ -92,7 +92,7 @@ _allowedBTagDiscriminators =['jetBProbabilityBJetTags'
                             ,'simpleSecondaryVertexHighPurBJetTags'
                             ,'simpleSecondaryVertexNegativeHighEffBJetTags'
                             ,'simpleSecondaryVertexNegativeHighPurBJetTags'
-                            ,'combinedSecondaryVertexBJetTags'
+                            #,'combinedSecondaryVertexBJetTags'
                             ,'combinedSecondaryVertexPositiveBJetTags'
                             ,'combinedSecondaryVertexV1BJetTags'
                             ,'combinedSecondaryVertexV1PositiveBJetTags'
@@ -339,7 +339,9 @@ class RunBTagging(ConfigToolBase):
                     else:
                         print '  --> ignored, since input %s not available!'%( vit(svTILabel) )
 
-                if tag == 'combinedSecondaryVertexBJetTags' or tag == 'combinedSecondaryVertexPositiveBJetTags' or tag == 'combinedSecondaryVertexV1BJetTags' or tag == 'combinedSecondaryVertexV1PositiveBJetTags' or tag == 'combinedSecondaryVertexMVABJetTags':
+                         # tag == 'combinedSecondaryVertexBJetTags' or
+                         
+                if tag == 'combinedSecondaryVertexPositiveBJetTags' or tag == 'combinedSecondaryVertexV1BJetTags' or tag == 'combinedSecondaryVertexV1PositiveBJetTags' or tag == 'combinedSecondaryVertexMVABJetTags':
                     if hasattr( process, ipTILabel ) and hasattr( process, svTILabel ):
                         if not hasattr(process, tag+label+postfix):
                             tagMod=getattr(btag,tag).clone(tagInfos = vit(ipTILabel,svTILabel))
