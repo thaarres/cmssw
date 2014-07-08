@@ -1,0 +1,900 @@
+commit c0db8a8f6dabe6d3386396398fe7aefc603bb85f
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Mon Jun 16 10:22:00 2014 +0200
+
+    fix for type not found root issue with JetTagMVATreeTrainer.cc
+
+commit afc2cc31da88b00556d14cf8a6a8047dcfb9d77a
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Mon Jun 9 22:02:47 2014 +0200
+
+    files needed for 62X_SLHC
+
+commit 52a0b1e875b014294a0f4648e2ecfa8b728f9171
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Mon Jun 9 21:16:02 2014 +0200
+
+    biases updated + fix in dotraining script to use correct bias script
+
+commit d38380e90dc21b2349aea55551d0a4c0430b7872
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Sun Jun 8 22:17:26 2014 +0200
+
+    c-tag comparison helper code
+
+commit fd8812c72540869fed754598ac012e1fe93ab318
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Sat Jun 7 21:00:11 2014 +0200
+
+    variable extraction and validation for ctagger
+
+commit 428fd707b9200548edef8e5b1db0cada949bc1e0
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Fri Jun 6 11:26:11 2014 +0200
+
+    ctag CSVIVFV: not tested, use carefully!
+
+commit e26d1ecb9e841541b7f56af6211a9a6a9fbeaea7
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Fri Jun 6 10:53:07 2014 +0200
+
+    ctag CSVSL
+
+commit 1922133921d0d94767f0c5144a2c1a5e9f233b60
+Merge: f7a10bd 3d2460f
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Fri Jun 6 10:46:38 2014 +0200
+
+    merge
+    
+    the commit.
+
+commit f7a10bd495832c57527c9ce2ecaaea95f6905ce4
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Wed May 28 22:05:45 2014 +0200
+
+    remove nonIVF variable extraction
+
+commit 3d2460f540f19437144291299da30a39917438a7
+Author: Petra Van Mulders <pvmulder@cern.ch>
+Date:   Wed May 28 21:54:33 2014 +0200
+
+    Delete Filter.C.bck
+
+commit 765d05b5f12a28e29125255940863904f8645662
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Wed May 28 21:50:31 2014 +0200
+
+    bugfixes in Train*xml files
+
+commit d2763048174b61339c52a6360489fac96d9d3a50
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Wed May 28 21:49:58 2014 +0200
+
+    files modified to use trackJetPt instead of jetPt
+
+commit 6143f492dd19d7fd9a43b256f6dd890ea3a0a82d
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Wed May 28 21:08:45 2014 +0200
+
+    clean up of validation files
+
+commit 3efe572b59ed209c443ee56aca92da7122ebcc08
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Wed May 28 20:55:21 2014 +0200
+
+    removed leptonP0Par from CSVSL VariableExtraction, cleanup of CSVSL validation files
+
+commit c9b640022cdee835afb465c76400678388cc0b8d
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Mon May 26 09:24:22 2014 +0200
+
+    updated file extracting the calibration records from the global tag
+
+commit 5f5d7021e1e9777c0e541e6209668625955b4374
+Author: Kevin Deroover <kederoov@gmail.com>
+Date:   Thu Apr 17 11:14:23 2014 +0200
+
+    Dedicated CSVIVFV2 training added, with TQ=any, selectedTracks_minMult=2 and trackJetPt
+
+commit f5acae70500e8d7207c6b779f73acac7dd0fd682
+Author: Kevin Deroover <kederoov@gmail.com>
+Date:   Thu Apr 17 11:03:38 2014 +0200
+
+    Dedicated CSVIVFV2 training added, with TQ=any, selectedTracks_minMult=2 and trackJetPt
+
+commit 6326468a30952f023c3ab7c822b14344d183000f
+Merge: eec201a 2695298
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Thu Apr 10 14:39:18 2014 +0200
+
+    Merge branch 'master' of github.com:cms-btv-pog/RecoBTau-JetTagMVALearning
+
+commit eec201aeeb917d37e67fc69dca45a22f2aa7564a
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Thu Apr 10 14:38:28 2014 +0200
+
+    bugfix
+
+commit 0c9ff8c8d7e41376119f790f9ea80204863e2ad4
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Thu Apr 10 14:34:26 2014 +0200
+
+    validation for old CSV(+IVF) and CSVV2
+
+commit 269529842a3f2775fbb34f4a7ae7024be9d014d7
+Merge: a18c227 943c4ba
+Author: JesusManuel <vizan@cern.ch>
+Date:   Wed Apr 9 16:27:27 2014 +0200
+
+    Merge branch 'master' of github.com:cms-analysis/RecoBTau-JetTagMVALearning
+
+commit a18c2279d3e9a457f07b6bc1dd9ae132d380c827
+Author: JesusManuel <vizan@cern.ch>
+Date:   Wed Apr 9 16:26:16 2014 +0200
+
+    Uses as inputs rootfiles obtained with command mvaExtractPDFs. The output is a folder with plots comparing both set of inputs, .html files are added to ease the comparison with a web browser
+
+commit 943c4baf677b9b9780b00027382ac4da704b644c
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Tue Apr 8 22:15:19 2014 +0200
+
+    bug fix for track qualityClass
+
+commit 07be571a13957b3f2d43116d41328f7e9f6af6b4
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Tue Apr 8 22:04:31 2014 +0200
+
+    added trackJetPt to Save*xml and Train*xml files for CSV_MLP and CSVSL
+
+commit 5f4df1c7de9eb94294dc0a0c867d35c19a1fec1e
+Merge: a528b6b d4b5fac
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Tue Apr 8 11:53:46 2014 +0200
+
+    update to latest version while committing changes to reco_validation_alltaggers
+
+commit a528b6b7bde0b2c7751948cb8a5b729238526cfc
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Tue Apr 8 11:51:47 2014 +0200
+
+    added validation file with trackQuality 'any' + updated also CSVV1 and CSV for trackMinMult of 2
+
+commit d4b5fac799e089cf32a44c28c21ccb297701196f
+Merge: 554e7a7 315d313
+Author: JesusManuel <vizan@cern.ch>
+Date:   Fri Apr 4 10:37:22 2014 +0200
+
+    Merge branch 'master' of github.com:cms-analysis/RecoBTau-JetTagMVALearning
+
+commit 554e7a7693e488ff4d2a49d44eecdfd2a1982992
+Author: JesusManuel <vizan@cern.ch>
+Date:   Fri Apr 4 10:36:06 2014 +0200
+
+    Latest version of xml files with fix range and some extra variables using the first track for the track based variables
+
+commit 315d313ec237785c2a746d963d69d15d30a6cdfa
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Tue Apr 1 20:40:23 2014 +0200
+
+    new track selection not for CSVV1 since it uses CombinedSVComputer.cc which was not updated with selectedTracks
+
+commit 0302ed67f6f81e27be58f7611ffe13ea24035c0b
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Tue Apr 1 20:23:47 2014 +0200
+
+    add calibrationrecords for CSVV1 with IVF
+
+commit e87f77bb8fee7bf17486232615ff2b632056724f
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Tue Apr 1 15:21:13 2014 +0200
+
+    modified trackMultiplicityMin to 2 and use std::copy
+
+commit ff5d72b0ab313f71391379917129ec86175423fc
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Sun Mar 30 23:05:52 2014 +0200
+
+    - new track selection for CSVV2 and CSVSL
+    - including trackJetPt in VariableExtractor from now on, this will break backwards compatibility!
+
+commit 8994466978336ee6a6b511d96b782a9704c5366c
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Mon Mar 24 21:30:47 2014 +0100
+
+    mva files with the various CSV trainings
+
+commit be15d0d444cdb28b89177b7bc7d45fb9ee7f23be
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Mon Mar 24 21:27:51 2014 +0100
+
+    all taggers in a single validation file`
+
+commit e5458aff5f74981e51c9838fd38a2a7e7aa64fea
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Fri Mar 7 11:23:25 2014 +0100
+
+    reject jets that have no genjet match to get rid of PU
+
+commit a9e35225f9dc9d9f07d561059ff64acd5612a497
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Tue Mar 4 21:14:13 2014 +0100
+
+    use new jetFlavour tool in training & validation of the MVA taggers: required removal of PAT stuff, ak5PFJets are currently used as input
+
+commit 416a56528d380dcb46884064d0ee49288f8d4850
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Fri Feb 28 17:17:02 2014 +0100
+
+    restore deleted file
+
+commit 853cce1215f49b3cdcffe80106720f43dfd6f018
+Merge: 8511c6f 8eab0f1
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Wed Feb 26 16:02:00 2014 +0100
+
+    Merge branch 'master' of github.com:cms-analysis/RecoBTau-JetTagMVALearning
+    no conflicting changes
+
+commit 8511c6f5f95f5cfb7df378fdb4612fd377b48749
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Wed Feb 26 16:00:32 2014 +0100
+
+    cleaning up of combined tagger dir
+
+commit 7a8cade0faac1b02b3684bca6df9e93730f7464a
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Wed Feb 26 15:36:53 2014 +0100
+
+    cleaning up old combined tagger training
+
+commit 231933dcf68fe24e44b90aad79f74b91ee49a260
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Wed Feb 26 15:22:26 2014 +0100
+
+    first version of combined CSV+SL tagger training
+
+commit fcf46bf5aeff7e7680846aae8d2a8b2edc066623
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Wed Feb 26 15:14:55 2014 +0100
+
+    bugfix in JetTagMVATreeTrainer that accomodates CSVV2 renaming and the combined tagger
+
+commit 8eab0f12914511f48e662523e7f0ec7787f36164
+Author: JesusManuel <vizan@cern.ch>
+Date:   Tue Feb 25 10:20:43 2014 +0100
+
+    Class to produce training xml failes. It is tailored to the CSV MLP training but it can be adapted to other needs
+
+commit 19a977172e0bcdbea61e448a4049a4210b7cae11
+Author: JesusManuel <vizan@cern.ch>
+Date:   Mon Jan 20 14:46:50 2014 +0100
+
+    Change default name of .db file to be created
+
+commit 53d4a43ea63b19aa5ced284942de26b0b1c2a677
+Author: JesusManuel <vizan@cern.ch>
+Date:   Mon Jan 20 14:46:10 2014 +0100
+
+    Bug fix
+
+commit dd7f8f682fc646acb3faa66a701315ebbcd69dc8
+Author: JesusManuel <vizan@cern.ch>
+Date:   Tue Jan 14 16:42:43 2014 +0100
+
+    Add a macro to perform a ranking of the variables. It uses as input a monitoring rootfile containing the output of a ProcMatrix
+
+commit c03593cc41b189ca3ba86639aeee0e34d6ab89c4
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Tue Jan 14 11:53:24 2014 +0100
+
+    update for CombinedSVV2
+
+commit 0870b5e859ca548b9d54916d99afe1846d2ca06e
+Merge: aa53eb5 ddac398
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Tue Jan 14 11:34:11 2014 +0100
+
+    Merge branch 'master' of github.com:cms-analysis/RecoBTau-JetTagMVALearning
+
+commit aa53eb56c02d18fd1c3c90d6d3c5183c04efe3e5
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Tue Jan 14 11:31:42 2014 +0100
+
+    variable extractor for new variables
+
+commit ddac398ac444485f29d806105e43d65aa39ff9d8
+Author: Tomo <tomo.umer@cern.ch>
+Date:   Mon Jan 13 12:25:59 2014 +0100
+
+    ctag files
+
+commit 9321db260904dbe15608bb00d9257ca389b791f7
+Author: pvmulder <pvmulder@cern.ch>
+Date:   Fri Jan 10 13:54:28 2014 +0100
+
+    small fix: jetTagComputer needed CSVV2
+
+commit 32100563a5c6a3796035ffafc30d8c24bfa89a89
+Author: Petra <pvmulder@cern.ch>
+Date:   Wed Dec 18 10:23:53 2013 +0100
+
+    BuildFile.xml required on some machines, otherwise problems with compilation
+
+commit e3f0888f8d95ac71cfd061974fc3120ef251503d
+Author: Petra <pvmulder@cern.ch>
+Date:   Tue Dec 17 15:51:27 2013 +0100
+
+    added validation files based on CombinedSVComputerV2
+
+commit 80fcd5aea264e8321cbf8a48a3f9ee7a9b067531
+Author: Petra <pvmulder@cern.ch>
+Date:   Fri Dec 13 21:48:29 2013 +0100
+
+    minor change
+
+commit 297e43eb1598ab1270a4817256f2898a53919c45
+Author: Petra <pvmulder@cern.ch>
+Date:   Fri Dec 13 21:36:28 2013 +0100
+
+    cleaning
+
+commit ce212e685b645bdf2fafd1a2301af38d22946a9b
+Author: Petra <pvmulder@cern.ch>
+Date:   Fri Dec 13 21:35:19 2013 +0100
+
+    latest version of LR and MLP with new variables in VariableExtractor
+
+commit 98d056b6fdbe046162eb1eeaa9640812136c9633
+Author: Petra <pvmulder@cern.ch>
+Date:   Fri Dec 13 21:32:58 2013 +0100
+
+    latest version of LR and MLP with new variables in VariableExtractor
+
+commit b1b63668a850701ab9cc76530edf7e73a3b44682
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Wed Apr 17 15:13:59 2013 +0000
+
+    19 pt/eta bins instead of 15
+
+commit 72aa65e6bc2b612f70f213d40a7904516d867426
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Mon Apr 15 09:43:59 2013 +0000
+
+    Commented SelectVars.C and jet eta/pt fitting by default
+
+commit 4f283ac1187f083fbaa90dc9dc7b5cc11c32523b
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Fri Apr 12 11:39:55 2013 +0000
+
+    updated xml files
+
+commit 04f30921df3fdbafc25c4bb7589ed3f2cee19da1
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Fri Apr 12 11:36:57 2013 +0000
+
+    non-fit reweighting also for combinedMVA
+
+commit 686e03bff54eb2f10464bf5e0d169d125a8cea14
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Mon Mar 18 09:44:17 2013 +0000
+
+    files needed for validation and some changes in files to make sure that names of outputfiles are consistent
+
+commit 45e88d3e047823109b0db49a88cc7f262699ff02
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Mon Mar 18 09:36:28 2013 +0000
+
+    uncommented some lines
+
+commit 1f60319d5a9de99f4623dba7833f866cc589989d
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Mon Mar 18 09:34:50 2013 +0000
+
+    first version of the files for the training of the supertagger
+
+commit 497c1d352bd3fdfc8d87783fe4517ebb4c42f2cd
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Mon Mar 11 14:44:18 2013 +0000
+
+    Adapted for simple 'no-fit jet reweighting'
+
+commit 989ff0a764c65cffe3d7155f8c69a967972f1528
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Mon Mar 11 13:23:36 2013 +0000
+
+    Added 2D histogram linear in Pt for the no-fit jet reweighting
+
+commit 45527884c3b090b73aa06ffe53c9bea51b55aca9
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Tue Feb 26 10:21:47 2013 +0000
+
+    Rolling back
+
+commit 9f0dce14c4b3a43d3df03ff168bf9261804fce99
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Tue Feb 26 10:11:39 2013 +0000
+
+    Changed default directory where it should look for Train*xml files to the ./ directory instead of TrainExtraVars/
+
+commit f552d05146cd73ad2d9d39769d075185ca0343cb
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Thu Dec 13 15:15:27 2012 +0000
+
+    High-pt training (19 eta/pt training bins)
+
+commit b86f75a7ba739d952711c4aa08d0c16cb091e26f
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Thu Dec 13 15:07:12 2012 +0000
+
+    High-Pt training (19 eta/pt training bins) and biases calculated from a ttbar sample
+
+commit a5f32d5df6a283286f68666b676747cd8020c6d5
+Author: David Abdurachmanov <sha1-ee7c64dd38fc5511d3c999bae43a19aa7aae4934@cern.ch>
+Date:   Thu Nov 8 08:37:40 2012 +0000
+
+    Fix SCRAM warning:
+    ****WARNING: Invalid tool RecoBTau/JetTagMVALearning. Please fix
+    src/RecoBTau/JetTagMVALearning/plugins/BuildFile.xml file.
+
+commit 09bf9345126c65b850c95cdf2f9d27b933996b97
+Author: Giulio Eulisse <sha1-a598d8593b5db48d5829590a227bbe04f25460b4@cern.ch>
+Date:   Wed Oct 31 14:22:53 2012 +0000
+
+    Moving / merging into plugins.
+
+commit f83ac226924c8a0fb25c096e9c5894346a55a71a
+Author: Giulio Eulisse <sha1-a598d8593b5db48d5829590a227bbe04f25460b4@cern.ch>
+Date:   Wed Oct 31 14:18:16 2012 +0000
+
+    Merge plugin and library since the only client for the latter is the former.
+    
+    * Move files in src and interface into plugins.
+    * Adapt buildfile
+    * Adapt include statements.
+
+commit 0bf6d089e36c0ffb2b40aba6679ac43613ea91fb
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Mon Oct 22 10:08:43 2012 +0000
+
+    Trackless jets fix
+
+commit d82e1802a84d0bc0b6533367557eceff71c4ccd5
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Wed Oct 3 16:28:51 2012 +0000
+
+    Changed the minimum pt for jets to 15 GeV for consistency
+
+commit 0c799d1b9a2da371569e4b97995d4938deaf679d
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Wed Oct 3 16:19:00 2012 +0000
+
+    Bias calculated for pt [15,600]
+
+commit c2c37c6cde6dff7699b2c9a08b59d91b60809803
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Wed Oct 3 16:12:03 2012 +0000
+
+    Removed PF variables (safer to use as long as issues with PF variables are not understood)
+
+commit a5ad31ef5fbc8fddc230709075b27d3b371e15af
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Wed Oct 3 15:25:45 2012 +0000
+
+    Pt range fix
+
+commit 4000634a1155ac3d5c787f32d3a2648007c1109b
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Wed Oct 3 15:25:19 2012 +0000
+
+    Extra control plots
+
+commit 07f99473008dfb11e841db481b8c1b60aae55a03
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Tue Sep 11 19:35:34 2012 +0000
+
+    Fix to train on events with eta > 2.1 and pt > 150 GeV
+
+commit d902a78cf48065fdc67137d0afe47ae1617ec664
+Author: Gerrit Van Onsem <sha1-ff66ccd792d476573dd8eccb9d7b4dc078d09986@cern.ch>
+Date:   Tue Sep 11 17:09:23 2012 +0000
+
+    Fix to train on events with eta > 2.1 and pt > 150 GeV
+
+commit f7e187bb9de1a0b456fed7f47e2c5a1bbfb8dc43
+Author: Jesus Manuel Vizan Garcia <sha1-b93c18a8f620ba1e7994e32d6b9263a50f6d369b@cern.ch>
+Date:   Fri Aug 24 12:13:04 2012 +0000
+
+    Fix bugs in the PF variables
+
+commit fcde1667eff151412d6aa96e7c8952f88df6fa2e
+Author: Jesus Manuel Vizan Garcia <sha1-b93c18a8f620ba1e7994e32d6b9263a50f6d369b@cern.ch>
+Date:   Wed Aug 22 15:59:03 2012 +0000
+
+    python macro to compare N curves for different training
+
+commit 401de877f14a5e775e7380f948f853f2417c30f9
+Author: Jesus Manuel Vizan Garcia <sha1-b93c18a8f620ba1e7994e32d6b9263a50f6d369b@cern.ch>
+Date:   Tue Aug 21 12:41:41 2012 +0000
+
+    Included by default the vetoing of trackSip3dSig_x variables by mistake. Removed all mentions to those variables in the macro
+
+commit 170af55fecf82818ceba2bbd885f55ce680fe22e
+Author: Jesus Manuel Vizan Garcia <sha1-b93c18a8f620ba1e7994e32d6b9263a50f6d369b@cern.ch>
+Date:   Tue Aug 21 11:30:09 2012 +0000
+
+    Add PF variables to SelectVars. All of them are vetoed by default
+
+commit 792b4b741968bf3e70f7a03c85301debfe4a5943
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Tue Aug 21 05:34:51 2012 +0000
+
+    PF variables added
+
+commit bfdf0425442f60d51689545cd1b10b86c1a4caa3
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Tue Jul 17 12:45:55 2012 +0000
+
+    fixed some duplicated lines
+
+commit 17eee94c3962c8e9041c7d43623cee3d679d2f15
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Sun Jul 15 21:37:51 2012 +0000
+
+    latest
+
+commit e9fd47f192f945b9eea9f20a451a0359731f9687
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Fri Jul 13 13:06:05 2012 +0000
+
+    default
+
+commit 45f9392bec1482801b05d07e3ed3670994cb46d1
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Fri Jul 13 12:46:26 2012 +0000
+
+    cleaning
+
+commit 123c6dcac93f552a352c729828b3d646d9db5a96
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Fri Jul 13 12:45:53 2012 +0000
+
+    fixes and cleaning
+
+commit be9b42a7b836b0001a31e767b4cd473c49185db7
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Mon Jul 9 22:08:01 2012 +0000
+
+    fix name of weights dir
+
+commit 644ca9a95669af5090d5ce9d0c4d9857b206ca7f
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Mon Jul 9 20:27:33 2012 +0000
+
+    details
+
+commit 1f909ce363a93eabad4ca2e211f7a4d78a7f9112
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Mon Jul 9 20:11:44 2012 +0000
+
+    macro to remove variables automatically
+
+commit e91975e2dcb3a5a397781ae927d7107b950f7352
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Mon Jul 9 20:10:38 2012 +0000
+
+    default xml files
+
+commit fb024bc023a0464ffb3075c608d6c610e8564100
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Mon Jul 9 20:05:17 2012 +0000
+
+    bug fixes and parallel processing
+
+commit a78259d41711c17c7e76f1c7f0f6e9d943e26050
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Mon Jul 9 20:03:29 2012 +0000
+
+    naming consistent!
+
+commit 52ceae31bf6d4ff53982996db3223de41b529fc2
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Mon Jul 9 19:57:38 2012 +0000
+
+    fixed name of module
+
+commit f7accb9b6477a4a7ab1b6e5bc1db09ea4028b69a
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Mon Jul 9 10:11:56 2012 +0000
+
+    fix for compatibility with doTrainingLR.sh script
+
+commit f8978077724b6a0ed881bb2ea08ed95c7256cd36
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Mon Jul 9 09:44:26 2012 +0000
+
+    fix
+
+commit 3563c782bf3886792189a1a9e63851f7d358877b
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Mon Jul 9 08:35:24 2012 +0000
+
+    files needed for CSV training
+
+commit d1b223ef50d7405b18a1d15f93ca42cf467935b3
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Mon Jul 9 07:37:35 2012 +0000
+
+    added variable names and some fixes
+
+commit b6baa8821dd205f759c2c44c375979ca72b87766
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Sun Jul 8 12:06:06 2012 +0000
+
+    macros for validation
+
+commit df7b19090763a0d805e9322080cc01fda4679e74
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Sun Jul 8 11:51:15 2012 +0000
+
+    uncommented the script
+
+commit 0eba403f378dd240bcf7e72f383153d2e047a636
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Sun Jul 8 11:45:35 2012 +0000
+
+    files needed for training
+
+commit 13ffa68a3ed1e9d4bf154efa2c61092974ca0116
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Sun Jul 8 11:40:18 2012 +0000
+
+    fixes to run be able to run with script
+
+commit 498376bb315ebd9620885791d926c9b6c4767e04
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Fri Jul 6 12:37:06 2012 +0000
+
+    removing confusing examples
+
+commit ee2847e7699976a76358fd51e3ea5a7c1b6e7645
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Fri Jul 6 12:32:48 2012 +0000
+
+    superseded
+
+commit a137114a1351161b7a2430d4c1e40414ef6ee93a
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Fri Jul 6 10:43:11 2012 +0000
+
+    code to calculate the bias for the xml files
+
+commit b2d7471a3bc5a577235640f377d85209b4244adf
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Fri Jul 6 09:38:59 2012 +0000
+
+    added control plots and explanations to code
+
+commit 9a92ae31e291947006a4c0416ab9a7ca167238d5
+Author: Petra Van Mulders <sha1-5bc12a867bfde123b515cf37b124580de4eadc1f@cern.ch>
+Date:   Fri Jul 6 08:50:33 2012 +0000
+
+    fix
+
+commit 016f96845895ce08b163ef85f21584875ad74b71
+Author: Jean-Roch Vlimant <sha1-c20eea45fcd90cd8b9272a4189992d8eff37fabb@cern.ch>
+Date:   Wed Mar 3 16:11:53 2010 +0000
+
+    remove comment bit of the buildfile
+
+commit 095c108b1af85692f14e7cb47bd9830fd14e2186
+Author: William Tanenbaum <sha1-faefd172b4369b2002e8f0f7d11f304fd9896b5b@cern.ch>
+Date:   Sun Feb 28 21:10:37 2010 +0000
+
+    Moved framework header
+
+commit f726314e288310a7f869da5b753018e96b8f5146
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Fri Feb 26 21:08:39 2010 +0000
+
+    .... gnah!
+
+commit 363c84fba8223a74c38f28f27ab66ed420585ea2
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Fri Feb 26 20:54:34 2010 +0000
+
+    Missing...
+
+commit 03653c42133b668a225ca7cd02faff00d448a3d4
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Thu Feb 25 17:52:55 2010 +0000
+
+    Attempt at allowing to train on particular semi-leptonic b-decay topologies.
+
+commit 04d6ec689c923d413705daee0e1a0fe22f33bb9f
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Wed Feb 24 16:05:26 2010 +0000
+
+    And these.
+
+commit bfd866f65d16eccc0334f54f386c2c4e42161254
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Wed Feb 24 16:04:39 2010 +0000
+
+    Add a few tools that have been used for training taggers.
+
+commit 32ccf7d69da900e6ad59987c158d0aeeb0071267
+Author: William Tanenbaum <sha1-faefd172b4369b2002e8f0f7d11f304fd9896b5b@cern.ch>
+Date:   Tue Feb 16 21:03:20 2010 +0000
+
+    Convert to XML
+
+commit 09ef7ad71aeddfceb116f71dc0a7fb35ceba57c7
+Author: William Tanenbaum <sha1-faefd172b4369b2002e8f0f7d11f304fd9896b5b@cern.ch>
+Date:   Tue Feb 16 20:37:03 2010 +0000
+
+    conversion to XML
+
+commit ad437e3cdb3f8923d2b8a935651651f67a43ac06
+Author: William Tanenbaum <sha1-faefd172b4369b2002e8f0f7d11f304fd9896b5b@cern.ch>
+Date:   Tue Feb 16 17:07:43 2010 +0000
+
+    Framework header migrations
+
+commit 9176e77c09a786a2ac9351114bc592226105aa7f
+Author: David Lange <sha1-b4ab71fd0383141ecc8720f477f1ba20f2889d65@cern.ch>
+Date:   Wed Dec 30 16:58:32 2009 +0000
+
+    Dependency cleanup
+
+commit 97bab9b81736cde83ea8a7ebf281591d944cdfe2
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Wed Oct 21 19:02:16 2009 +0000
+
+    Add CombinedSVMVA calibration files.
+
+commit 8002cfde5cccd84510eed37c134fbadbac9c45e9
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Wed Oct 21 18:55:24 2009 +0000
+
+    Convenience modules for juggling around btag MVA calibrations using MVA standalone files.
+
+commit 02c9135fdc62bba14def63d9026a519cde618e1a
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Mon Sep 14 18:32:23 2009 +0000
+
+    Use AntiKt 0.5 jets by default.
+
+commit 3e0ebadeb598feec08547571438470a9762c95a0
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Tue Jul 1 08:10:48 2008 +0000
+
+    Remove old-style cfi/cff/cfg files.
+
+commit d757b3e2257c88e2ef8fd387c0b1c6a5d11eb2d8
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Sat Apr 26 12:56:21 2008 +0000
+
+    Add python test config files.
+
+commit bb25fc455524d356f6bddd89868b53533add1804
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Fri Apr 25 08:12:15 2008 +0000
+
+    Adjust JetTagMVATrainer to use same syntax as JetTagProducer now.
+    Make test config file work again.
+
+commit e7bf848bd9ea65fe680cd409868aa87f80b7ca40
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Thu Apr 24 22:18:38 2008 +0000
+
+    Use new passEventSetup call to help CombinedMVA trainer to run on top
+    of existing MVA computers.
+
+commit 1688b6f8748b2f6b13478e388f7b6b70d7daa67d
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Tue Apr 22 16:16:58 2008 +0000
+
+    Fix last commit.
+
+commit 108914b666169b1a2a6fd333d0df84beb2552111
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Tue Apr 22 15:34:53 2008 +0000
+
+    Update to recent CMSSW.
+
+commit 4bd959b10d5a2b23ab0420409f30f1696e654982
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Wed Mar 5 12:22:29 2008 +0000
+
+    * add beginOfTime() when creating new IOVs in CondDB.
+    * timetime tracked -> untracked
+    * get rid of backwards compatibilities in MVAComputer/MVATrainer
+      (this is getting ridiculous)
+    * add a few new TMVA methods in ROOT 5.18
+
+commit 54cc0fd26c7ed9d00aa46856f309c0bc8955fddb
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Mon Feb 25 09:44:09 2008 +0000
+
+    Add config files in test directory to show how MVA jet tag calibration
+    payloads can be moved around, and the XML mapping file.
+
+commit 2101e7381e87b2f16a14385eb4868113541421c1
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Mon Dec 10 07:10:21 2007 +0000
+
+    Fix build breakage. Use accessor method instead of direct member access.
+
+commit e6d45ff184b1ce1617e7f8038e01ace331febf43
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Fri Nov 23 16:10:28 2007 +0000
+
+    Switch to new JetTagComputer acccess method instead of direct member access.
+
+commit 953c5cab6b8ec1e833cc9eee88271ce2fa66e419
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Tue Oct 9 07:44:43 2007 +0000
+
+    Fix build failure with updated JetFlavourMatching DataFormats.
+
+commit 07ccc56d9626cd774f0a9555c71ab24e44489f68
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Fri Oct 5 23:32:05 2007 +0000
+
+    Make JetTagMVATrainer use the same interface to JetTagComputers, allowing
+    the trainer to train multi-TagInfo computers. For that purpose, use the
+    new interface to pull the actual taggingVariables from the JetTagComputer
+    (without computing the actual discriminator, obviously). In case the
+    TagInfos provide the necessary TaggingVariables, the plain
+    GenericMVAJetTagComputer can be used as passthrough.
+
+commit 71d6ae694b4351f70af887c1af3cfd4d46995e1e
+Author: Andrea Bocci <sha1-f43ac2238d9995f8c883948414432a9e5f50335c@cern.ch>
+Date:   Fri Jul 13 14:29:37 2007 +0000
+
+    new View #include file
+
+commit bd6fe4badc941b0ec57e10edaa20b66bc8c802d9
+Author: Andrea Rizzi <sha1-1bc0dceaaf7943f784ebe0a9992d5584d5d83d2a@cern.ch>
+Date:   Wed May 30 07:31:24 2007 +0000
+
+    fix compilation
+
+commit 6dbde8c8240a29cc2ded2d319e0fc219637798bc
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Mon May 28 02:54:11 2007 +0000
+
+    * switch MVALearning to allow multi-category trainers as well, share
+      infrastructure of selecting category and caching computers with
+      JetTagComputer.
+
+commit 1b723cbe09a82bfd0cda4a03045f67d626e2d00f
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Sat May 26 20:33:58 2007 +0000
+
+    * add jet pt and eta to tagging variables for learning
+    * move from JetFlavourMatcher to persistent JetFlavour AssociationVector
+    * improved learning description (handles 1st and 2nd track separately)
+
+commit ea888c9b0c66950019db6ac10f2469d929a0ad1a
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Wed May 23 11:42:02 2007 +0000
+
+    Fixed config file.
+
+commit b8fb0d9ce6ba092a46c9a533a178f7a76354e402
+Author: saout <sha1-a9a1d87b03630df246ec7c3919d4d79e9a149492@cern.ch>
+Date:   Mon May 21 17:44:28 2007 +0000
+
+    An initial version of a JetTag calibration trainer for
+    GenericMVAJetTagComputer discriminator computer that works on top of
+    BTauReco/BaseTagInfo tag infos produced by various b-tagging algorithms.
+    An example that makes use of the MVATrainerLooper and MVATrainerSave module
+    for training in the CMSSW framework is included.
+
+commit 3fe168fdaccd49ca36f4aec147d3e57beb801b4f
+Author: Cvspm Cvs Librarian <sha1-deb0447780b32a0da94bfbe5525643f027b298b1@cern.ch>
+Date:   Tue Oct 3 07:55:01 2006 +0000
+
+    CVSpm module added
