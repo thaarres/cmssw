@@ -9,13 +9,15 @@ namespace btag {
     /** Type of secondary vertex found in jet:
      *  - RecoVertex   : a secondary vertex has been fitted from
      *                   a selection of tracks
+     *  - RecoRecoVertex: two secondary vertices has been fitted from
+     *                    a selection of tracks
      *  - PseudoVertex : no RecoVertex has been found but tracks
      *                   with significant impact parameter could be
      *                   combined to a "pseudo" vertex
      *  - NoVertex     : neither of the above attemps were successfull
      *  - NotDefined   : if anything went wrong, set to this value
      */
-    enum VertexType {RecoVertex=0, PseudoVertex=1, NoVertex=2, UndefVertex=99 };
+    enum VertexType {RecoVertex=0, PseudoVertex=1, NoVertex=2, RecoRecoVertex=3, UndefVertex=99 };
 
     /**
      *  convenience functions that return descriptive strings, rather than

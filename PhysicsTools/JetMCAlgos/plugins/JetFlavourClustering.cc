@@ -383,8 +383,10 @@ JetFlavourClustering::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
        }
      }
      // set hadron flavour
-     if( clusteredbHadrons.size()>0 )
+     if( clusteredbHadrons.size()==1 )
        hadronFlavour = 5;
+     if( clusteredbHadrons.size()>1 )
+       hadronFlavour = 9;
      else if( clusteredcHadrons.size()>0 && clusteredbHadrons.size()==0 )
        hadronFlavour = 4;
      // set parton flavour

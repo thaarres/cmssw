@@ -15,6 +15,8 @@ std::string btag::Vertices::name ( VertexType v )
       return "PseudoVertex";
     case RecoVertex:
       return "RecoVertex";
+    case RecoRecoVertex:
+      return "RecoRecoVertex";  
     default:
       return "???";
   }
@@ -24,6 +26,7 @@ btag::Vertices::VertexType btag::Vertices::type ( const std::string & s )
 {
   if ( s=="NoVertex" || s=="No" ) return NoVertex;
   if ( s=="PseudoVertex" || s=="Pseudo" ) return PseudoVertex;
+  if ( s=="RecoRecoVertex" || s=="RecoReco" ) return RecoRecoVertex;  
   if ( s=="RecoVertex" || s=="Reco" ) return RecoVertex;
 
   int i = atoi ( s.c_str() );

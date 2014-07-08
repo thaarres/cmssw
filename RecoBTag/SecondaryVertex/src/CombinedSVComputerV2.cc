@@ -174,12 +174,11 @@ CombinedSVComputerV2::operator () (const TrackIPTagInfo &ipInfo,
 
 	int vtx = -1;
 	unsigned int numberofvertextracks = 0;
-
+	
 	//IF THERE ARE SECONDARY VERTICES THE JET FALLS IN THE RECOVERTEX CATEGORY
 	IterationRange range = flipIterate(svInfo.nVertices(), true);
 	range_for(i, range) {
-		if (vtx < 0) vtx = i; //RecoVertex category (vtx=0) if we enter at least one time in this loop!
-
+		if (vtx < 1) vtx = i; //RecoVertex category (vtx=0) if we enter at least one time in this loop!
 		numberofvertextracks = numberofvertextracks + (svInfo.secondaryVertex(i)).nTracks();
 
 		const Vertex &vertex = svInfo.secondaryVertex(i);
@@ -213,7 +212,8 @@ CombinedSVComputerV2::operator () (const TrackIPTagInfo &ipInfo,
 	}
 
 	if (vtx >= 0) {
-		vtxType = btag::Vertices::RecoVertex;
+		if (vtx == 0) vtxType = btag::Vertices::RecoVertex;
+		if (vtx > 0) vtxType = btag::Vertices::RecoRecoVertex;
 		vars.insert(btau::flightDistance2dVal,flipValue(svInfo.flightDistance(vtx, true).value(),true),true);
 		vars.insert(btau::flightDistance2dSig,flipValue(svInfo.flightDistance(vtx, true).significance(),true),true);
 		vars.insert(btau::flightDistance3dVal,flipValue(svInfo.flightDistance(vtx, false).value(),true),true);
