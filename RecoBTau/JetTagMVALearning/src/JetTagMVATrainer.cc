@@ -169,7 +169,7 @@ void JetTagMVATrainer::analyze(const edm::Event& event,
 			<< "JetTagComputer is not a MVAJetTagComputer "
 			   "in JetTagMVATrainer" << std::endl;
 
-	computer->passEventSetup(es);
+	//computer->passEventSetup(es);
 
 	// finalize the JetTagMVALearning <-> JetTagComputer glue setup
 	if (!setupDone)
@@ -273,7 +273,7 @@ void JetTagMVATrainer::analyze(const edm::Event& event,
 				continue;
 		}
 
-		GenericMVAComputer *mvaComputer =
+		GenericMVAComputer const* mvaComputer =
 					computerCache->getComputer(index);
 		if (!mvaComputer)
 			continue;
@@ -288,6 +288,6 @@ void JetTagMVATrainer::analyze(const edm::Event& event,
 		std::copy(mvaComputer->iterator(variables.begin()),
 		          mvaComputer->iterator(variables.end()), insert);
 
-		static_cast<MVAComputer*>(mvaComputer)->eval(values);
+		static_cast<MVAComputer const*>(mvaComputer)->eval(values);
 	}
 }

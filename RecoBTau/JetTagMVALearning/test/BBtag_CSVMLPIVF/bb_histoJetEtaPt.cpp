@@ -63,10 +63,11 @@ int main(int argc, char **argv)
   cat.push_back(fix+"RecoVertex");
   cat.push_back(fix+"PseudoVertex");
   cat.push_back(fix+"NoVertex");
+  cat.push_back(fix+"RecoRecoVertex");
   std::vector<TString> types;
-  types.push_back("BB");
-  types.push_back("C");
   types.push_back("B");
+//  types.push_back("C");
+  types.push_back("BB");
 //   types.push_back("B_BB");
 //   types.push_back("B_C");
   for(size_t i=0;i< cat.size(); i++){

@@ -31,3 +31,5 @@
 140702_123846: /afs/cern.ch/cms/ccs/wm/scripts/Crab/CRAB_2_10_6/python/crab.py -status -c crab_AllwBias020714/
 140702_124023: /afs/cern.ch/cms/ccs/wm/scripts/Crab/CRAB_2_10_6/python/crab.py -status -c crab_AllwBias020714/
 140702_133113: /afs/cern.ch/cms/ccs/wm/scripts/Crab/CRAB_2_10_6/python/crab.py -status -c crab_AllwBias020714/
+140710_174550: /afs/cern.ch/cms/ccs/wm/scripts/Crab/CRAB_2_10_6/python/crab.py -create
+140710_174629: /afs/cern.ch/cms/ccs/wm/scripts/Crab/CRAB_2_10_6/python/crab.py -create

@@ -16,19 +16,9 @@ process.combinedSVTrainer = cms.EDAnalyzer("JetTagMVATreeTrainer",
 	minimumTransverseMomentum = cms.double(15.0),
 	minimumPseudoRapidity	= cms.double(0),
 	maximumPseudoRapidity	= cms.double(2.5),
-
-	factor = cms.double(50),
-	bound = cms.double(50),
-
 	fileNames = cms.vstring(
 		"./CombinedSVNoVertex_B.root",
 		"./CombinedSVNoVertex_C.root"
-	),
-	weightFile = cms.string("weights/CombinedSVNoVertex_BC_histo.txt"),
-	biasFiles = cms.vstring(
-		"-",
-		"*",
-		"weights/CombinedSVNoVertex_B_C_ratio.txt"
 	)
 )
 

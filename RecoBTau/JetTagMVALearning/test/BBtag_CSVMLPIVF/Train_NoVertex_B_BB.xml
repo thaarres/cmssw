@@ -270,7 +270,7 @@
 			<general strict="true"/>
         	              <category count="19"/>
 	    <sigbkg size="500"/>
-                        <bias_table><!--B_DUSG-->
+                        <bias_table><!--B_BB-->
 
 <bias>0.494679</bias>
 <bias>0.603949</bias>
@@ -293,7 +293,7 @@
 <bias>0.52488</bias>
 
 
-                       </bias_table><!--B_DUSG-->
+                       </bias_table><!--B_BB-->
 		</config>
 		<output>
 			<var name="var1"/>

@@ -154,10 +154,12 @@ TObjArray RecoBTag::getHistArray ( TFile * histoFile , const std::string& baseNa
   const std::string nameB    ( baseName + "B" ) ;
   const std::string nameC    ( baseName + "C" ) ;
   const std::string nameDUSG ( baseName + "DUSG" ) ;
+  const std::string nameBB ( baseName + "BB" ) ;
   //
   histos.Add ( (TH1F*)histoFile->Get( nameB.c_str() ) ) ;
   histos.Add ( (TH1F*)histoFile->Get( nameC.c_str() ) ) ;
   histos.Add ( (TH1F*)histoFile->Get( nameDUSG.c_str() ) ) ;
+  histos.Add ( (TH1F*)histoFile->Get( nameBB.c_str() ) ) ;
   //
   return histos ;
 }
@@ -177,6 +179,8 @@ std::string RecoBTag::flavour ( const int& flav ) {
       return "c";
     case 5 : 
       return "b";
+    case 9 : 
+      return "bb";
     case 21 : 
       return "g";
     default :
@@ -192,6 +196,7 @@ bool RecoBTag::flavourIsU ( const int & flav ) { return flav == 2  ; }
 bool RecoBTag::flavourIsS ( const int & flav ) { return flav == 3  ; }
 bool RecoBTag::flavourIsC ( const int & flav ) { return flav == 4  ; }
 bool RecoBTag::flavourIsB ( const int & flav ) { return flav == 5  ; }
+bool RecoBTag::flavourIsBB( const int & flav ) { return flav == 9  ; }
 bool RecoBTag::flavourIsG ( const int & flav ) { return flav == 21 ; }
 
 bool RecoBTag::flavourIsDUS  ( const int & flav ) { return ( flavourIsD(flav) || flavourIsU(flav) || flavourIsS(flav) ) ; }

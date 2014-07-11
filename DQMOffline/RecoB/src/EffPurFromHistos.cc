@@ -19,13 +19,13 @@ using namespace RecoBTag;
 
 EffPurFromHistos::EffPurFromHistos ( const std::string & ext, TH1F * h_d, TH1F * h_u,
 	TH1F * h_s, TH1F * h_c, TH1F * h_b, TH1F * h_g,	TH1F * h_ni,
-	TH1F * h_dus, TH1F * h_dusg, const std::string& label, const bool& mc, int nBin, double startO, double endO) :
+	TH1F * h_dus, TH1F * h_dusg, TH1F * h_bb, const std::string& label, const bool& mc, int nBin, double startO, double endO) :
 	//BTagPlotPrintC(),
         fromDiscriminatorDistr(false),
 	histoExtension(ext), effVersusDiscr_d(h_d), effVersusDiscr_u(h_u),
 	effVersusDiscr_s(h_s), effVersusDiscr_c(h_c), effVersusDiscr_b(h_b),
 	effVersusDiscr_g(h_g), effVersusDiscr_ni(h_ni), effVersusDiscr_dus(h_dus),
-	effVersusDiscr_dusg(h_dusg), nBinOutput(nBin), startOutput(startO),
+	effVersusDiscr_dusg(h_dusg),effVersusDiscr_bb(h_bb),nBinOutput(nBin), startOutput(startO),
 	endOutput(endO),  mcPlots_(mc), label_(label)
 {
   // consistency check
@@ -62,7 +62,7 @@ EffPurFromHistos::EffPurFromHistos
   effVersusDiscr_ni =   discrCutEfficScan->histo_ni  ();
   effVersusDiscr_dus =  discrCutEfficScan->histo_dus ();
   effVersusDiscr_dusg = discrCutEfficScan->histo_dusg();
-  
+  effVersusDiscr_bb   = discrCutEfficScan->histo_bb();
   
 
   effVersusDiscr_d->SetXTitle ( "Discriminant" );
@@ -83,6 +83,8 @@ EffPurFromHistos::EffPurFromHistos
   effVersusDiscr_dus->GetXaxis()->SetTitleOffset ( 0.75 );
   effVersusDiscr_dusg->SetXTitle ( "Discriminant" );
   effVersusDiscr_dusg->GetXaxis()->SetTitleOffset ( 0.75 );
+  effVersusDiscr_bb->SetXTitle ( "Discriminant" );
+  effVersusDiscr_bb->GetXaxis()->SetTitleOffset ( 0.75 );
   }else{
     effVersusDiscr_d =    0;
     effVersusDiscr_u =    0; 
@@ -93,6 +95,7 @@ EffPurFromHistos::EffPurFromHistos
     effVersusDiscr_ni =    0;
     effVersusDiscr_dus =   0;
     effVersusDiscr_dusg =  0;
+    effVersusDiscr_bb =  0;
 }
 
   // discr. for computation
@@ -269,6 +272,7 @@ void EffPurFromHistos::plot (TPad * plotCanvas /* = 0 */) {
   EffFlavVsBEff_ni ->getTH1F()-> SetMinimum(0.01);
   EffFlavVsBEff_dus ->getTH1F()-> SetMinimum(0.01);
   EffFlavVsBEff_dusg ->getTH1F()-> SetMinimum(0.01);
+  EffFlavVsBEff_bb ->getTH1F()-> SetMinimum(0.01);
 
   // plot separately u,d and s
 //  EffFlavVsBEff_d ->GetXaxis()->SetTitle ( "b-jet efficiency" );
@@ -321,7 +325,8 @@ void EffPurFromHistos::check () {
   const int& nBins_ni   = effVersusDiscr_ni   -> GetNbinsX();
   const int& nBins_dus  = effVersusDiscr_dus  -> GetNbinsX();
   const int& nBins_dusg = effVersusDiscr_dusg -> GetNbinsX();
-
+  const int& nBins_bb   = effVersusDiscr_bb   -> GetNbinsX();
+  
   const bool& lNBins =
     ( nBins_d == nBins_u    &&
       nBins_d == nBins_s    &&
@@ -330,7 +335,8 @@ void EffPurFromHistos::check () {
       nBins_d == nBins_g    &&
       nBins_d == nBins_ni   &&
       nBins_d == nBins_dus  &&
-      nBins_d == nBins_dusg     );
+      nBins_d == nBins_dusg &&
+      nBins_d == nBins_bb       );
 
   if ( !lNBins ) {
     throw cms::Exception("Configuration")
@@ -348,7 +354,8 @@ void EffPurFromHistos::check () {
   const float& sBin_ni   = effVersusDiscr_ni   -> GetBinCenter(1);
   const float& sBin_dus  = effVersusDiscr_dus  -> GetBinCenter(1);
   const float& sBin_dusg = effVersusDiscr_dusg -> GetBinCenter(1);
-
+  const float& sBin_bb   = effVersusDiscr_bb   -> GetBinCenter(1);
+  
   const bool& lSBin =
     ( sBin_d == sBin_u    &&
       sBin_d == sBin_s    &&
@@ -357,7 +364,8 @@ void EffPurFromHistos::check () {
       sBin_d == sBin_g    &&
       sBin_d == sBin_ni   &&
       sBin_d == sBin_dus  &&
-      sBin_d == sBin_dusg     );
+      sBin_d == sBin_dusg &&
+      sBin_d == sBin_bb       );
 
   if ( !lSBin ) {
     throw cms::Exception("Configuration")
@@ -375,7 +383,8 @@ void EffPurFromHistos::check () {
   const float& eBin_ni   = effVersusDiscr_ni   -> GetBinCenter( nBins_d - 1 );
   const float& eBin_dus  = effVersusDiscr_dus  -> GetBinCenter( nBins_d - 1 );
   const float& eBin_dusg = effVersusDiscr_dusg -> GetBinCenter( nBins_d - 1 );
-
+  const float& eBin_bb   = effVersusDiscr_bb   -> GetBinCenter( nBins_d - 1 );
+  
   const bool& lEBin =
     ( eBin_d == eBin_u    &&
       eBin_d == eBin_s    &&
@@ -384,7 +393,8 @@ void EffPurFromHistos::check () {
       eBin_d == eBin_g    &&
       eBin_d == eBin_ni   &&
       eBin_d == eBin_dus  &&
-      eBin_d == eBin_dusg     );
+      eBin_d == eBin_dusg &&
+      eBin_d == eBin_bb      );
 
   if ( !lEBin ) {
     throw cms::Exception("Configuration")
@@ -406,7 +416,7 @@ void EffPurFromHistos::compute ()
        EffFlavVsBEff_ni = 0; 
        EffFlavVsBEff_dus = 0; 
        EffFlavVsBEff_dusg = 0; 
-    
+       EffFlavVsBEff_bb = 0;
     return; 
  
   }
@@ -429,7 +439,8 @@ void EffPurFromHistos::compute ()
   EffFlavVsBEff_ni   = (prov.book1D ( hB + "NI"   + hE , hB + "NI"   + hE , nBinOutput , startOutput , endOutput )) ;
   EffFlavVsBEff_dus  = (prov.book1D ( hB + "DUS"  + hE , hB + "DUS"  + hE , nBinOutput , startOutput , endOutput )) ;
   EffFlavVsBEff_dusg = (prov.book1D ( hB + "DUSG" + hE , hB + "DUSG" + hE , nBinOutput , startOutput , endOutput )) ;
-
+  EffFlavVsBEff_bb   = (prov.book1D ( hB + "BB  " + hE , hB + "BB  " + hE , nBinOutput , startOutput , endOutput )) ;
+  
   EffFlavVsBEff_d->getTH1F()->SetXTitle ( "b-jet efficiency" );
   EffFlavVsBEff_d->getTH1F()->SetYTitle ( "non b-jet efficiency" );
   EffFlavVsBEff_d->getTH1F()->GetXaxis()->SetTitleOffset ( 0.75 );
@@ -466,7 +477,10 @@ void EffPurFromHistos::compute ()
   EffFlavVsBEff_dusg->getTH1F()->SetYTitle ( "non b-jet efficiency" );
   EffFlavVsBEff_dusg->getTH1F()->GetXaxis()->SetTitleOffset ( 0.75 );
   EffFlavVsBEff_dusg->getTH1F()->GetYaxis()->SetTitleOffset ( 0.75 );
-
+  EffFlavVsBEff_bb->getTH1F()->SetXTitle ( "b-jet efficiency" );
+  EffFlavVsBEff_bb->getTH1F()->SetYTitle ( "bb-jet efficiency" );
+  EffFlavVsBEff_bb->getTH1F()->GetXaxis()->SetTitleOffset ( 0.75 );
+  EffFlavVsBEff_bb->getTH1F()->GetYaxis()->SetTitleOffset ( 0.75 );
 
   // loop over eff. vs. discriminator cut b-histo and look in which bin the closest entry is;
   // use fact that eff decreases monotonously
@@ -497,7 +511,8 @@ void EffPurFromHistos::compute ()
       EffFlavVsBEff_ni   -> Fill ( effBMid , effVersusDiscr_ni  ->GetBinContent ( binClosest ) );
       EffFlavVsBEff_dus  -> Fill ( effBMid , effVersusDiscr_dus ->GetBinContent ( binClosest ) );
       EffFlavVsBEff_dusg -> Fill ( effBMid , effVersusDiscr_dusg->GetBinContent ( binClosest ) );
-
+      EffFlavVsBEff_bb   -> Fill ( effBMid , effVersusDiscr_bb->GetBinContent ( binClosest ) );
+      
       EffFlavVsBEff_d  ->getTH1F()  -> SetBinError ( iBinB , effVersusDiscr_d   ->GetBinError ( binClosest ) );
       EffFlavVsBEff_u  ->getTH1F()  -> SetBinError ( iBinB , effVersusDiscr_u   ->GetBinError ( binClosest ) );
       EffFlavVsBEff_s  ->getTH1F()  -> SetBinError ( iBinB , effVersusDiscr_s   ->GetBinError ( binClosest ) );
@@ -507,6 +522,7 @@ void EffPurFromHistos::compute ()
       EffFlavVsBEff_ni ->getTH1F()  -> SetBinError ( iBinB , effVersusDiscr_ni  ->GetBinError ( binClosest ) );
       EffFlavVsBEff_dus->getTH1F()  -> SetBinError ( iBinB , effVersusDiscr_dus ->GetBinError ( binClosest ) );
       EffFlavVsBEff_dusg->getTH1F() -> SetBinError ( iBinB , effVersusDiscr_dusg->GetBinError ( binClosest ) );
+      EffFlavVsBEff_bb->getTH1F() -> SetBinError ( iBinB , effVersusDiscr_bb->GetBinError ( binClosest ) );
     }
     else {
       //CW      cout << "Did not find right bin for b-efficiency : " << effBMid << endl;

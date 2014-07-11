@@ -87,7 +87,8 @@ public:
   inline TH1F * histo_ni   () const { return theHisto_ni->getTH1F()   ; }
   inline TH1F * histo_dus  () const { return theHisto_dus->getTH1F()  ; }
   inline TH1F * histo_dusg () const { return theHisto_dusg->getTH1F() ; }
-
+  inline TH1F * histo_bb   () const { return theHisto_bb->getTH1F() ; }
+  
   std::vector<TH1F*> getHistoVector() const;
   
 
@@ -128,7 +129,8 @@ protected:
   MonitorElement *theHisto_ni   ;
   MonitorElement *theHisto_dus  ;
   MonitorElement *theHisto_dusg ;
-
+  MonitorElement *theHisto_bb   ;
+  
   //  DQMStore * dqmStore_; 
 
 
@@ -157,7 +159,7 @@ FlavourHistograms<T>::FlavourHistograms (const std::string& baseNameTitle_ , con
   theArrayDimension = 0  ;
     
   // check plot order string 
-  if ( thePlotFirst == "l" || thePlotFirst == "c" || thePlotFirst == "b" ) {
+  if ( thePlotFirst == "l" || thePlotFirst == "c" || thePlotFirst == "b"|| thePlotFirst == "bb" ) {
     // OK
   }
   else {
@@ -181,6 +183,7 @@ FlavourHistograms<T>::FlavourHistograms (const std::string& baseNameTitle_ , con
       theHisto_ni    = (prov.book1D ( theBaseNameTitle + "NI"   , theBaseNameDescription + " ni-jets"   , theNBins , theLowerBound , theUpperBound )) ; 
       theHisto_dus   = (prov.book1D ( theBaseNameTitle + "DUS"  , theBaseNameDescription + " dus-jets"  , theNBins , theLowerBound , theUpperBound )) ; 
       theHisto_dusg  = (prov.book1D ( theBaseNameTitle + "DUSG" , theBaseNameDescription + " dusg-jets" , theNBins , theLowerBound , theUpperBound )) ;
+      theHisto_bb    = (prov.book1D ( theBaseNameTitle + "BB  " , theBaseNameDescription + " bb  -jets" , theNBins , theLowerBound , theUpperBound )) ;
     }else{
       theHisto_d = 0;
       theHisto_u = 0;
@@ -191,6 +194,7 @@ FlavourHistograms<T>::FlavourHistograms (const std::string& baseNameTitle_ , con
       theHisto_ni = 0;
       theHisto_dus = 0;
       theHisto_dusg = 0;
+      theHisto_bb = 0;
     }
       // statistics if requested
     if ( theStatistics ) {
@@ -206,6 +210,7 @@ FlavourHistograms<T>::FlavourHistograms (const std::string& baseNameTitle_ , con
 	theHisto_ni  ->getTH1F()->Sumw2() ; 
 	theHisto_dus ->getTH1F()->Sumw2() ; 
 	theHisto_dusg->getTH1F()->Sumw2() ;
+	theHisto_bb  ->getTH1F()->Sumw2() ;
       }
     }
   } else {
@@ -222,6 +227,7 @@ FlavourHistograms<T>::FlavourHistograms (const std::string& baseNameTitle_ , con
       theHisto_ni    =prov.access(theBaseNameTitle + "NI"  ) ; 
       theHisto_dus   =prov.access(theBaseNameTitle + "DUS" ) ; 
       theHisto_dusg  =prov.access(theBaseNameTitle + "DUSG") ;
+      theHisto_bb    =prov.access(theBaseNameTitle + "BB") ;
     }
   }
 
@@ -295,6 +301,7 @@ void FlavourHistograms<T>::settitle(const char* title) {
       theHisto_ni  ->setAxisTitle(title) ;
       theHisto_dus ->setAxisTitle(title) ;
       theHisto_dusg->setAxisTitle(title) ;
+      theHisto_bb  ->setAxisTitle(title) ;
     }
 }
 
@@ -324,8 +331,8 @@ void FlavourHistograms<T>::plot (TPad * theCanvas /* = 0 */) {
   gPad->SetGridy ( 0 ) ;
   gPad->SetTitle ( 0 ) ;
 
-  MonitorElement * histo[4];
-  int col[4], lineStyle[4], markerStyle[4];
+  MonitorElement * histo[5];
+  int col[5], lineStyle[5], markerStyle[5];
   int lineWidth = 1 ;
 
   const double markerSize = gPad->GetWh() * gPad->GetHNDC() / 500.;
@@ -335,6 +342,7 @@ void FlavourHistograms<T>::plot (TPad * theCanvas /* = 0 */) {
   //CW histo_1 = theHisto_dus ;
   histo[1] = theHisto_b ;
   histo[2] = theHisto_c ;
+  histo[4] = theHisto_bb ;
   histo[3]= 0 ;
 
   double max = theMax;
@@ -342,6 +350,7 @@ void FlavourHistograms<T>::plot (TPad * theCanvas /* = 0 */) {
     max = theHisto_dusg->getTH1F()->GetMaximum();
     if (theHisto_b->getTH1F()->GetMaximum() > max) max = theHisto_b->getTH1F()->GetMaximum();
     if (theHisto_c->getTH1F()->GetMaximum() > max) max = theHisto_c->getTH1F()->GetMaximum();
+    if (theHisto_bb->getTH1F()->GetMaximum() > max) max = theHisto_bb->getTH1F()->GetMaximum();
   }
 
   if (btppNI) {
@@ -354,14 +363,17 @@ void FlavourHistograms<T>::plot (TPad * theCanvas /* = 0 */) {
     col[1] = 2 ;
     col[2] = 6 ;
     col[3] = 3 ;
+    col[4] = 7 ;
     lineStyle[0] = 1 ;
     lineStyle[1] = 1 ;
     lineStyle[2] = 1 ;
     lineStyle[3] = 1 ;
+    lineStyle[4] = 1 ;
     markerStyle[0] = 20 ;
     markerStyle[1] = 21 ;
     markerStyle[2] = 22 ;
     markerStyle[3] = 23 ;
+    markerStyle[4] = 24 ;
    lineWidth = 1 ;
   }
   else { // different marker/line styles
@@ -369,14 +381,17 @@ void FlavourHistograms<T>::plot (TPad * theCanvas /* = 0 */) {
     col[2] = 1 ;
     col[3] = 1 ;
     col[0] = 1 ;
+    col[4] = 1 ;
     lineStyle[0] = 2 ;
     lineStyle[1] = 1 ;
     lineStyle[2] = 3 ;
     lineStyle[3] = 4 ;
+    lineStyle[4] = 5 ;
     markerStyle[0] = 20 ;
     markerStyle[1] = 21 ;
     markerStyle[2] = 22 ;
     markerStyle[3] = 23 ;
+    markerStyle[4] = 24 ;
   }
 
   // if changing order (NI stays always last)
@@ -400,13 +415,24 @@ void FlavourHistograms<T>::plot (TPad * theCanvas /* = 0 */) {
     if ( btppColour  ) col[1] = 4 ;
     if ( !btppColour ) lineStyle[1] = 2 ;
   }
+  
+    // b to plot first   
+  if ( thePlotFirst == "bb" ) {
+    histo[0] = theHisto_bb ;
+    if ( btppColour  ) col[0] = 7 ;
+    if ( !btppColour ) lineStyle[0] = 7 ;
+    histo[4] = theHisto_dusg ;
+    if ( btppColour  ) col[4] = 4 ;
+    if ( !btppColour ) lineStyle[4] = 2 ;
+  }
+
 
 
   histo[0] ->getTH1F()->GetXaxis()->SetTitle ( theBaseNameDescription.c_str() ) ;
   histo[0] ->getTH1F()->GetYaxis()->SetTitle ( "Arbitrary Units" ) ;
   histo[0] ->getTH1F()->GetYaxis()->SetTitleOffset(1.25) ;
 
-  for (int i=0; i != 4; ++i) {
+  for (int i=0; i != 5; ++i) {
     if (histo[i]== 0 ) continue;
     histo[i] ->getTH1F()->SetStats ( false ) ;
     histo[i] ->getTH1F()->SetLineStyle ( lineStyle[i] ) ;
@@ -423,6 +449,7 @@ void FlavourHistograms<T>::plot (TPad * theCanvas /* = 0 */) {
 histo[0] ->getTH1F()->Draw() ;}
     if (histo[1]->getTH1F()->GetEntries() != 0) histo[1] ->getTH1F()->DrawNormalized("Same") ;
     if (histo[2]->getTH1F()->GetEntries() != 0) histo[2]->getTH1F() ->DrawNormalized("Same") ;
+    if (histo[4]->getTH1F()->GetEntries() != 0) histo[4]->getTH1F() ->DrawNormalized("Same") ;
     if ((histo[3] != 0) && (histo[3]->getTH1F()->GetEntries() != 0))  histo[3] ->getTH1F()->DrawNormalized("Same") ;
   }
   else {
@@ -431,6 +458,7 @@ histo[0] ->getTH1F()->Draw() ;}
     histo[0]->getTH1F()->Draw() ;
     histo[1]->getTH1F()->Draw("Same") ;
     histo[2]->getTH1F()->Draw("Same") ;
+    histo[4]->getTH1F()->Draw("Same") ;
     if ( histo[3] != 0 ) histo[3]->getTH1F()->Draw("Same") ;
   }
 
@@ -466,6 +494,7 @@ void FlavourHistograms<T>::divide ( const FlavourHistograms<T> & bHD ) const {
       theHisto_ni   ->getTH1F()-> Divide ( theHisto_ni->getTH1F()   , bHD.histo_ni  () , 1.0 , 1.0 , "b" ) ;
       theHisto_dus  ->getTH1F()-> Divide ( theHisto_dus->getTH1F()  , bHD.histo_dus () , 1.0 , 1.0 , "b" ) ;
       theHisto_dusg ->getTH1F()-> Divide ( theHisto_dusg->getTH1F() , bHD.histo_dusg() , 1.0 , 1.0 , "b" ) ;
+      theHisto_bb   ->getTH1F()-> Divide ( theHisto_bb->getTH1F() , bHD.histo_bb() , 1.0 , 1.0 , "b" ) ;
     }
 }
   
@@ -499,6 +528,9 @@ void FlavourHistograms<T>::fillVariable ( const int & flavour , const T & var ) 
     case 5:
       theHisto_b->Fill( var );
       return;
+    case 9:
+      theHisto_bb->Fill( var );
+      return;
     case 21:
       theHisto_g->Fill( var );
       theHisto_dusg->Fill( var );
@@ -524,6 +556,7 @@ std::vector<TH1F*> FlavourHistograms<T>::getHistoVector() const
       histoVector.push_back ( theHisto_ni->getTH1F()  );
       histoVector.push_back ( theHisto_dus->getTH1F() );
       histoVector.push_back ( theHisto_dusg->getTH1F());
+      histoVector.push_back ( theHisto_bb->getTH1F());
     }
   return histoVector;
 }

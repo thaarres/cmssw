@@ -3,7 +3,7 @@ int EfficiencyCompare(){
   gStyle->SetOptStat(0);
 //  gStyle->SetOptTitle(0);
   
-TFile* inFile = TFile::Open("/afs/cern.ch/user/t/thaarres/removeMe/CMSSW_5_3_14/src/RecoBTau/JetTagMVALearning/test/CSV_MLP/Validation/DQM_V0001_R000000001__POG__BTAG__CSVV2.root");
+TFile* inFile = TFile::Open("/afs/cern.ch/user/t/thaarres/CSVTraining/CMSSW_5_3_14/src/RecoBTau/JetTagMVALearning/test/BBtag_CSVMLPIVF/Validation/DQM_V0001_R000000001__POG__BTAG__CSVV2.root");
 
 
 TH1F* CSVV2_BvsDUSG = (TH1F*)inFile->Get("DQMData/Run 1/Btag/Run summary/CSVV2_GLOBAL/FlavEffVsBEff_DUSG_discr_CSVV2_GLOBAL");
@@ -34,15 +34,15 @@ oldCSV_BvsC->SetMarkerColor(4);
 oldCSVIVF_BvsC->SetMarkerColor(5);
 
  CSVIVFV2_BvsDUSG->GetXaxis()->SetTitle("B efficiency");   
- CSVIVFV2_BvsDUSG->GetYaxis()->SetTitle("DUSG efficiency");
- CSVIVFV2_BvsDUSG->SetTitle("B vs DUSG");
+ CSVIVFV2_BvsDUSG->GetYaxis()->SetTitle("BB efficiency");
+ CSVIVFV2_BvsDUSG->SetTitle("B vs BB");
 
  CSVIVFV2_BvsC->GetXaxis()->SetTitle("B efficiency");   
  CSVIVFV2_BvsC->GetYaxis()->SetTitle("C efficiency");
  CSVIVFV2_BvsC->SetTitle("B vs C");
  
  
-TCanvas* c1 = new TCanvas("c1","CSV: B vs. UDSG",900,700);
+TCanvas* c1 = new TCanvas("c1","CSV: B vs. BB",900,700);
 c1->cd(1);
 //c1->SetLogy();
 gPad->SetGridx();
@@ -86,6 +86,6 @@ leg2->SetTextSize(0.04);
 leg2->Draw();
 
   
-c1->Print("Efficiency_plots/BvsDUSG_linear.root");
-c2->Print("Efficiency_plots/BvsC_linear.root");
+// c1->Print("Efficiency_plots/BvsDUSG_linear.root");
+// c2->Print("Efficiency_plots/BvsC_linear.root");
 }

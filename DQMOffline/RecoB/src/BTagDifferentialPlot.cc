@@ -31,7 +31,8 @@ BTagDifferentialPlot::BTagDifferentialPlot (const double& bEff, const ConstVarTy
 	theDifferentialHistoB_g    ( 0 ) ,
 	theDifferentialHistoB_ni   ( 0 ) ,
 	theDifferentialHistoB_dus  ( 0 ) ,
-	theDifferentialHistoB_dusg ( 0 )  {}
+	theDifferentialHistoB_dusg ( 0 ) ,
+	theDifferentialHistoB_bb   ( 0 ) {}
 
 
 BTagDifferentialPlot::~BTagDifferentialPlot () {
@@ -65,12 +66,14 @@ void BTagDifferentialPlot::plot (TCanvas & thePlotCanvas ) {
   int col_c   ;
   int col_g   ;
   int col_dus ;
+  int col_bb ;
   int col_ni  ;
 
 //  int mStyle_b   ;
   int mStyle_c   ;
   int mStyle_g   ;
   int mStyle_dus ;
+  int mStyle_bb ;
   int mStyle_ni  ;
 
   // marker size (same for all)
@@ -81,11 +84,13 @@ void BTagDifferentialPlot::plot (TCanvas & thePlotCanvas ) {
     col_c    = 6 ;
     col_g    = 3 ;
     col_dus  = 4 ;
+    col_dus  = 7 ;
     col_ni   = 5 ;
 //    mStyle_b   = 20 ;
     mStyle_c   = 20 ;
     mStyle_g   = 20 ;
     mStyle_dus = 20 ;
+    mStyle_bb  = 20 ;
     mStyle_ni  = 20 ;
   }
   else {
@@ -93,11 +98,13 @@ void BTagDifferentialPlot::plot (TCanvas & thePlotCanvas ) {
     col_c    = 1 ;
     col_g    = 1 ;
     col_dus  = 1 ;
+    col_bb   = 1 ;
     col_ni   = 1 ;
 //    mStyle_b   = 12 ;
     mStyle_c   = 22 ;
     mStyle_g   = 29 ;
     mStyle_dus = 20 ;
+    mStyle_bb = 25 ;
     mStyle_ni  = 27 ;
   }
 
@@ -141,6 +148,12 @@ void BTagDifferentialPlot::plot (TCanvas & thePlotCanvas ) {
   theDifferentialHistoB_g   ->getTH1F()-> SetStats     ( false ) ;
   theDifferentialHistoB_g   ->getTH1F()-> Draw("peSame") ;
 
+  theDifferentialHistoB_bb   ->getTH1F()-> SetMarkerColor ( col_bb ) ;
+  theDifferentialHistoB_bb   ->getTH1F()-> SetLineColor   ( col_bb ) ;
+  theDifferentialHistoB_bb   ->getTH1F()-> SetMarkerSize  ( mSize ) ;
+  theDifferentialHistoB_bb   ->getTH1F()-> SetMarkerStyle ( mStyle_bb ) ;
+  theDifferentialHistoB_bb   ->getTH1F()-> SetStats     ( false ) ;
+  theDifferentialHistoB_bb   ->getTH1F()-> Draw("peSame") ;
   // NI if wanted
   if ( btppNI ) {
     theDifferentialHistoB_ni ->getTH1F()-> SetMarkerColor ( col_ni ) ;
@@ -259,6 +272,7 @@ void BTagDifferentialPlot::bookHisto () {
   theDifferentialHistoB_ni   = (prov.book1D ( "NI_"   + commonName , "NI_"   + commonName , nBins , binArray )) ;
   theDifferentialHistoB_dus  = (prov.book1D ( "DUS_"  + commonName , "DUS_"  + commonName , nBins , binArray )) ;
   theDifferentialHistoB_dusg = (prov.book1D ( "DUSG_" + commonName , "DUSG_" + commonName , nBins , binArray )) ;
+  theDifferentialHistoB_bb   = (prov.book1D ( "BB_"   + commonName , "BB_  " + commonName , nBins , binArray )) ;
 }
 
 
@@ -304,6 +318,7 @@ void BTagDifferentialPlot::fillHisto () {
     effPurDifferentialPairs.push_back ( make_pair ( currentEffPurFromHistos->getEffFlavVsBEff_ni()   , theDifferentialHistoB_ni ->getTH1F()  ) ) ;
     effPurDifferentialPairs.push_back ( make_pair ( currentEffPurFromHistos->getEffFlavVsBEff_dus()  , theDifferentialHistoB_dus->getTH1F()  ) ) ;
     effPurDifferentialPairs.push_back ( make_pair ( currentEffPurFromHistos->getEffFlavVsBEff_dusg() , theDifferentialHistoB_dusg->getTH1F() ) ) ;
+    effPurDifferentialPairs.push_back ( make_pair ( currentEffPurFromHistos->getEffFlavVsBEff_bb()   , theDifferentialHistoB_bb->getTH1F() ) ) ;
 
     for ( vector< pair<TH1F*,TH1F*> >::const_iterator itP  = effPurDifferentialPairs.begin() ;
 	                                              itP != effPurDifferentialPairs.end()   ; ++itP ) {

@@ -176,7 +176,8 @@ JetTagMVAExtractor::Tree::Tree(const JetTagMVAExtractor &main, Index index) :
 	flavourMap[7] = "B";
 	// in case more than one hadron of that type in jet:
 	flavourMap[9] = "BB";
-	
+	flavourMap[21] = "G";
+
 	
 	if (index.index < 0 || index.index >= (int)main.calibrationLabels.size())
 	  return;
@@ -393,7 +394,7 @@ void JetTagMVAExtractor::analyze(const edm::Event& event, const edm::EventSetup&
 			<< "JetTagComputer is not a MVAJetTagComputer "
 			   "in JetTagMVAExtractor" << std::endl;
 
-	computer->passEventSetup(es);
+	//computer->passEventSetup(es);
 
 	// finalize the JetTagMVALearning <-> JetTagComputer glue setup
 	if (!setupDone)
@@ -439,7 +440,9 @@ void JetTagMVAExtractor::analyze(const edm::Event& event, const edm::EventSetup&
 		JetInfoMap::iterator pos = jetInfos.find(iter->first);
 		if (pos != jetInfos.end())
 //			pos->second.flavour = std::abs(iter->second.getFlavour());
-			pos->second.flavour = std::abs(iter->second.getHadronFlavour());
+//			pos->second.flavour = std::abs(iter->second.getHadronFlavour());
+			pos->second.flavour = std::abs(iter->second.getPartonFlavour());
+
 			
 // ////////////OOBS, remove!/////////////////
 // 			if(pos->second.flavour !=0)std::cout<<"Hadron Flavour="<<pos->second.flavour<<std::endl;
@@ -456,8 +459,8 @@ void JetTagMVAExtractor::analyze(const edm::Event& event, const edm::EventSetup&
 		edm::RefToBase<Jet> jet = iter->first;
 		
 		//Get the jets containing two B hadrons
-		const reco::JetFlavourInfo & flavorInfo = (*jetFlavourHandle)[jet];
-		bool isBB = (flavorInfo.getbHadrons().size()>=2);
+		//const reco::JetFlavourInfo & flavorInfo = (*jetFlavourHandle)[jet];
+		//bool isBB = (flavorInfo.getbHadrons().size()>=2);
 		//if(isBB)std::cout<<"Nr B hadrons="<<flavorInfo.getbHadrons().size()<<std::endl;
 		
 		const JetInfo &info = iter->second;

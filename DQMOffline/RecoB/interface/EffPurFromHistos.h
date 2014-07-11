@@ -18,7 +18,7 @@ class EffPurFromHistos {
 
   EffPurFromHistos ( const std::string & ext, TH1F * h_d, TH1F * h_u,
 	TH1F * h_s, TH1F * h_c, TH1F * h_b, TH1F * h_g,	TH1F * h_ni,
-		     TH1F * h_dus, TH1F * h_dusg, const std::string& label, const bool& mc,
+		     TH1F * h_dus, TH1F * h_dusg, TH1F * h_bb, const std::string& label, const bool& mc,
 	int nBin = 100 , double startO = 0.005 , double endO = 1.005 ) ;
 	// defaults reasonable for lifetime based tags
 
@@ -42,7 +42,7 @@ class EffPurFromHistos {
   TH1F * getEffFlavVsBEff_ni   () { return EffFlavVsBEff_ni ->getTH1F()  ; };
   TH1F * getEffFlavVsBEff_dus  () { return EffFlavVsBEff_dus ->getTH1F() ; };
   TH1F * getEffFlavVsBEff_dusg () { return EffFlavVsBEff_dusg ->getTH1F(); };
-
+  TH1F * getEffFlavVsBEff_bb ()   { return EffFlavVsBEff_bb   ->getTH1F(); };
  
 
   void epsPlot(const std::string & name);
@@ -84,7 +84,7 @@ class EffPurFromHistos {
   TH1F * effVersusDiscr_ni   ;
   TH1F * effVersusDiscr_dus  ;
   TH1F * effVersusDiscr_dusg ;
-
+  TH1F * effVersusDiscr_bb    ;
 
   // the corresponding output histograms (flavour-eff vs. b-efficiency)
 
@@ -105,7 +105,7 @@ class EffPurFromHistos {
   MonitorElement * EffFlavVsBEff_ni   ;
   MonitorElement * EffFlavVsBEff_dus  ;
   MonitorElement * EffFlavVsBEff_dusg ;
-
+  MonitorElement * EffFlavVsBEff_bb   ; 
   //  DQMStore * dqmStore_; 
   std::string label_;
 

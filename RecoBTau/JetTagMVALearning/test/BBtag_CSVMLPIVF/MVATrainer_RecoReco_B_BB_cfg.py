@@ -17,19 +17,19 @@ process.CombinedSVV2Trainer = cms.EDAnalyzer("JetTagMVATreeTrainer",
 	minimumPseudoRapidity	= cms.double(0),
 	maximumPseudoRapidity	= cms.double(2.5),
 
-	factor = cms.double(1),
-	bound = cms.double(50),
+	#factor = cms.double(1),
+	#bound = cms.double(50),
 
 	fileNames = cms.vstring(
 		" /afs/cern.ch/user/t/thaarres/CSVTraining/CMSSW_5_3_14/src/RecoBTau/JetTagMVALearning/test/rootfiles/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6_Summer12_DR53X-PU_S10_START53_V19-v1_AODSIM/RecoVsRecoReco/CombinedSVV2RecoRecoVertex_B.root",
 		" /afs/cern.ch/user/t/thaarres/CSVTraining/CMSSW_5_3_14/src/RecoBTau/JetTagMVALearning/test/rootfiles/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6_Summer12_DR53X-PU_S10_START53_V19-v1_AODSIM/RecoVsRecoReco/CombinedSVV2RecoRecoVertex_BB.root"
-	),
-	weightFile = cms.string("weights/CombinedSVV2RecoRecoVertex_BBB_histo.txt"),
-	biasFiles = cms.vstring(
-		"*",
-		"-",
-#		"weights/CombinedSVV2RecoRecoVertex_B_BB_ratio.txt"
-		"RecoRecoVertex_BB_B.txt"
+	#),
+	#weightFile = cms.string("weights/CombinedSVV2RecoRecoVertex_BBB_histo.txt"),
+	#biasFiles = cms.vstring(
+		#"*",
+		#"-",
+##		"weights/CombinedSVV2RecoRecoVertex_B_BB_ratio.txt"
+		#"RecoRecoVertex_BB_B.txt"
 	)
 )
 
