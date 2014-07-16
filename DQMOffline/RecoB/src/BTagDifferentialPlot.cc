@@ -84,7 +84,7 @@ void BTagDifferentialPlot::plot (TCanvas & thePlotCanvas ) {
     col_c    = 6 ;
     col_g    = 3 ;
     col_dus  = 4 ;
-    col_dus  = 7 ;
+    col_bb   = 7 ;
     col_ni   = 5 ;
 //    mStyle_b   = 20 ;
     mStyle_c   = 20 ;

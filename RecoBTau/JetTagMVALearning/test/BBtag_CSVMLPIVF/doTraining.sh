@@ -30,19 +30,19 @@ prefix="CombinedSVV2"
 #files=("MVATrainer_No_B_BB_cfg.py" "MVATrainer_No_B_C_cfg.py" "MVATrainer_Pseudo_B_BB_cfg.py" "MVATrainer_Pseudo_B_C_cfg.py" "MVATrainer_Reco_B_BB_cfg.py" "MVATrainer_Reco_B_C_cfg.py" "MVATrainer_RecoReco_B_BB_cfg.py" "MVATrainer_RecoReco_B_C_cfg.py")
 files=("MVATrainer_No_B_BB_cfg.py" "MVATrainer_Pseudo_B_BB_cfg.py" "MVATrainer_Reco_B_BB_cfg.py" "MVATrainer_RecoReco_B_BB_cfg.py")
 
-l=0
-while [ $l -lt 4  ]
-do
-	jobsrunning=0
-	while [ $jobsrunning -lt $answer ]
-	do
-echo ${files[l]}
-		nohup cmsRun ${files[l]} &
-		let jobsrunning=$jobsrunning+1
-		let l=$l+1
-	done
-	wait
-done
+# l=0
+# while [ $l -lt 4  ]
+# do
+# 	jobsrunning=0
+# 	while [ $jobsrunning -lt $answer ]
+# 	do
+# echo ${files[l]}
+# 		nohup cmsRun ${files[l]} &
+# 		let jobsrunning=$jobsrunning+1
+# 		let l=$l+1
+# 	done
+# 	wait
+# done
 
 # echo ">>>> CHECK THAT THE train*_save.root FILES ARE CORRECTLY PRODUCED! OPEN A FILE AND CHECK THAT THE WEIGHT BRANCH IS NOT EMPTY...."
 # echo " "
@@ -50,25 +50,27 @@ done
 # echo "If you want to do the actual training: by default the Train*xml files are used, for detailed studies one could use CSVMVA*xml. First chose which ones you want to use and then uncomment the following lines in the doTraining.sh script."
 # 
 # CombinationsArray=("NoVertex_B_BB" "NoVertex_B_C" "PseudoVertex_B_BB" "PseudoVertex_B_C" "RecoVertex_B_BB" "RecoVertex_B_C" "RecoRecoVertex_B_BB" "RecoRecoVertex_B_C")
-# l=0
-# while [ $l -lt 8 ]
-# do
-# 	jobsrunning=0
-# 	while [[ $jobsrunning -lt $answer && $jobsrunning -lt 8 ]] 
-# 	do
-# 		echo Processing ${CombinationsArray[l]}
-# 		mkdir tmp${CombinationsArray[l]}
-# 		cd tmp${CombinationsArray[l]}
-#  		echo mvaTreeTrainer ../Train_${CombinationsArray[l]}.xml ${CombinationsArray[l]}.mva ../train_${CombinationsArray[l]}_save.root
-#  		nohup mvaTreeTrainer ../Train_${CombinationsArray[l]}.xml ${CombinationsArray[l]}.mva ../train_${CombinationsArray[l]}_save.root &
+ CombinationsArray=("NoVertex_B_BB" "PseudoVertex_B_BB" "RecoVertex_B_BB" "RecoRecoVertex_B_BB")
+
+l=0
+while [ $l -lt 4 ]
+do
+	jobsrunning=0
+	while [[ $jobsrunning -lt $answer && $jobsrunning -lt 4 ]] 
+	do
+		echo Processing ${CombinationsArray[l]}
+		mkdir tmp${CombinationsArray[l]}
+		cd tmp${CombinationsArray[l]}
+ 		echo mvaTreeTrainer ../Train_${CombinationsArray[l]}.xml ${CombinationsArray[l]}.mva ../train_${CombinationsArray[l]}_save.root
+ 		nohup mvaTreeTrainer ../Train_${CombinationsArray[l]}.xml ${CombinationsArray[l]}.mva ../train_${CombinationsArray[l]}_save.root &
 # #		echo mvaTreeTrainer ../CSVMVA_${CombinationsArray[l]}_defaultFromDB.xml tmp.mva ../train_${CombinationsArray[l]}_save.root
 # #		nohup mvaTreeTrainer ../CSVMVA_${CombinationsArray[l]}_defaultFromDB.xml tmp.mva ../train_${CombinationsArray[l]}_save.root &
-# 		cd ..
-# 		let jobsrunning=$jobsrunning+1
-# 		let l=$l+1
-# 	done
-# 	wait
-# done
+		cd ..
+		let jobsrunning=$jobsrunning+1
+		let l=$l+1
+	done
+	wait
+done
 
 
 # echo "Combine the B versus BB and B versus C training "

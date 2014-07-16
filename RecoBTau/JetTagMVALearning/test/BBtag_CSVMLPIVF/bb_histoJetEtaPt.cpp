@@ -63,7 +63,7 @@ int main(int argc, char **argv)
   cat.push_back(fix+"RecoVertex");
   cat.push_back(fix+"PseudoVertex");
   cat.push_back(fix+"NoVertex");
-  cat.push_back(fix+"RecoRecoVertex");
+//  cat.push_back(fix+"RecoRecoVertex");
   std::vector<TString> types;
   types.push_back("B");
 //  types.push_back("C");

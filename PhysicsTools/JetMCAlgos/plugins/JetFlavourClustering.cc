@@ -165,6 +165,7 @@ class JetFlavourClustering : public edm::EDProducer {
       const double        ghostRescaling_;
       const bool          hadronFlavourHasPriority_;
       const bool          useSubjets_;
+      const bool          useBBFlavour_;
 
       ClusterSequencePtr  fjClusterSeq_;
       JetDefPtr           fjJetDefinition_;
@@ -190,7 +191,8 @@ JetFlavourClustering::JetFlavourClustering(const edm::ParameterSet& iConfig) :
    jetPtMin_(0.), // hardcoded to 0. since we simply want to recluster all input jets which already had some PtMin applied
    ghostRescaling_(iConfig.getParameter<double>("ghostRescaling")),
    hadronFlavourHasPriority_(iConfig.getParameter<bool>("hadronFlavourHasPriority")),
-   useSubjets_(iConfig.exists("groomedJets") && iConfig.exists("subjets"))
+   useSubjets_(iConfig.exists("groomedJets") && iConfig.exists("subjets")),
+   useBBFlavour_(iConfig.getParameter<bool>("useBBFlavour"))
 
 {
    // register your products
@@ -383,9 +385,9 @@ JetFlavourClustering::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
        }
      }
      // set hadron flavour
-     if( clusteredbHadrons.size()==1 )
+     if( clusteredbHadrons.size()>=1 )
        hadronFlavour = 5;
-     if( clusteredbHadrons.size()>1 )
+     if( clusteredbHadrons.size()>1 && useBBFlavour_ )
        hadronFlavour = 9;
      else if( clusteredcHadrons.size()>0 && clusteredbHadrons.size()==0 )
        hadronFlavour = 4;

@@ -45,6 +45,7 @@ class CombinedSVComputerV2 {
 	bool					vertexMassCorrection;
 	reco::V0Filter				pseudoVertexV0Filter;
 	reco::V0Filter				trackPairV0Filter;
+	bool					useRecoReco_;
 };
 
 #endif // RecoBTag_SecondaryVertex_CombinedSVComputerV2_h

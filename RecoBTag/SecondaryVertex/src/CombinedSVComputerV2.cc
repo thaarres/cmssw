@@ -65,7 +65,8 @@ CombinedSVComputerV2::CombinedSVComputerV2(const edm::ParameterSet &params) :
 	useTrackWeights(params.getParameter<bool>("useTrackWeights")),
 	vertexMassCorrection(params.getParameter<bool>("correctVertexMass")),
 	pseudoVertexV0Filter(params.getParameter<edm::ParameterSet>("pseudoVertexV0Filter")),
-	trackPairV0Filter(params.getParameter<edm::ParameterSet>("trackPairV0Filter"))
+	trackPairV0Filter(params.getParameter<edm::ParameterSet>("trackPairV0Filter")),
+	useRecoReco_(params.getParameter<bool>("useRecoReco"))
 {
 }
 
@@ -178,7 +179,8 @@ CombinedSVComputerV2::operator () (const TrackIPTagInfo &ipInfo,
 	//IF THERE ARE SECONDARY VERTICES THE JET FALLS IN THE RECOVERTEX CATEGORY
 	IterationRange range = flipIterate(svInfo.nVertices(), true);
 	range_for(i, range) {
-		if (vtx < 1) vtx = i; //RecoVertex category (vtx=0) if we enter at least one time in this loop!
+	  	if (vtx < 0) vtx = i; //RecoVertex category (vtx=0) if we enter at least one time in this loop!
+		if (vtx < 1 && useRecoReco_) vtx = i; //Use this for 4 vtx categories
 		numberofvertextracks = numberofvertextracks + (svInfo.secondaryVertex(i)).nTracks();
 
 		const Vertex &vertex = svInfo.secondaryVertex(i);
@@ -212,8 +214,10 @@ CombinedSVComputerV2::operator () (const TrackIPTagInfo &ipInfo,
 	}
 
 	if (vtx >= 0) {
-		if (vtx == 0) vtxType = btag::Vertices::RecoVertex;
-		if (vtx > 0) vtxType = btag::Vertices::RecoRecoVertex;
+		if (vtx >= 0) vtxType = btag::Vertices::RecoVertex;
+		if (vtx > 0 && useRecoReco_) vtxType = btag::Vertices::RecoRecoVertex;
+//		vtxType = btag::Vertices::RecoVertex;
+		vtx=0; //Set vtx=0 again such that the first SV is used to compute SV variables. In the future also add info on second SV!
 		vars.insert(btau::flightDistance2dVal,flipValue(svInfo.flightDistance(vtx, true).value(),true),true);
 		vars.insert(btau::flightDistance2dSig,flipValue(svInfo.flightDistance(vtx, true).significance(),true),true);
 		vars.insert(btau::flightDistance3dVal,flipValue(svInfo.flightDistance(vtx, false).value(),true),true);

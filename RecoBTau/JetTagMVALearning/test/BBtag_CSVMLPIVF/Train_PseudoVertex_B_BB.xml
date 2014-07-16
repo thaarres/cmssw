@@ -313,28 +313,47 @@
 												<general strict="true"/>
         	              <category count="19"/>
 	                      <sigbkg size="500"/>
-                        <bias_table><!--B_DUSG-->
+                        <bias_table><!--B_BB-->
+<!--<bias>1.43198</bias>
+<bias>1.54967</bias>
+<bias>0</bias>
+<bias>0.877165</bias>
+<bias>0.875877</bias>
+<bias>0</bias>
+<bias>0.636576</bias>
+<bias>1.54578</bias>
+<bias>0</bias>
+<bias>0.760861</bias>
+<bias>0.818321</bias>
+<bias>1.0283</bias>
+<bias>0.629978</bias>
+<bias>0.766875</bias>
+<bias>0.591996</bias>
+<bias>0.605964</bias>
+<bias>0.839764</bias>
+<bias>1.32006</bias>
+<bias>0</bias>     -->   
+<bias>0.833929</bias><!--B_BB RecoOnly-->
+<bias>2.64483</bias>
+<bias>0</bias>
+<bias>0.735456</bias>
+<bias>1.02652</bias>
+<bias>0</bias>
+<bias>0.751991</bias>
+<bias>1.31733</bias>
+<bias>0</bias>
+<bias>0.653172</bias>
+<bias>0.618514</bias>
+<bias>0.726214</bias>
+<bias>0.67301</bias>
+<bias>0.922458</bias>
+<bias>1</bias>
+<bias>0.732043</bias>
+<bias>0.937862</bias>
+<bias>0.994742</bias>
+<bias>1.4023</bias><!--B_BB RecoOnly-->
 
-<bias>15.9876</bias>
-<bias>18.3107</bias>
-<bias>16.2624</bias>
-<bias>7.78643</bias>
-<bias>8.47539</bias>
-<bias>7.54226</bias>
-<bias>5.6141</bias>
-<bias>5.74704</bias>
-<bias>4.94291</bias>
-<bias>4.69452</bias>
-<bias>4.3728</bias>
-<bias>3.1419</bias>
-<bias>3.79953</bias>
-<bias>3.16405</bias>
-<bias>2.72256</bias>
-<bias>2.81606</bias>
-<bias>3.21926</bias>
-<bias>2.57965</bias>
-<bias>3.32301</bias>
-                        </bias_table><!--B_DUSG-->
+</bias_table><!--B_BB-->
 		</config>
 		<output>
 			<var name="var1"/>

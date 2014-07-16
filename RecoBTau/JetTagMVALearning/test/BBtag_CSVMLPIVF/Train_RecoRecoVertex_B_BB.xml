@@ -327,6 +327,7 @@
         	              <category count="19"/>
 	     <sigbkg size="500"/>			 
        <bias_table><!--B_BB-->
+<!-- 
 <bias>58.0902</bias>
 <bias>41.6971</bias>
 <bias>28.3985</bias>
@@ -346,6 +347,26 @@
 <bias>6.82707</bias>
 <bias>7.75588</bias>
 <bias>4.73601</bias>
+ -->
+ <bias>3.64717</bias>
+<bias>8.16162</bias>
+<bias>0</bias>
+<bias>2.03965</bias>
+<bias>2.4828</bias>
+<bias>10.1688</bias>
+<bias>1.60511</bias>
+<bias>2.7824</bias>
+<bias>1.67647</bias>
+<bias>2.21779</bias>
+<bias>2.08506</bias>
+<bias>2.28644</bias>
+<bias>2.07862</bias>
+<bias>2.30672</bias>
+<bias>1.74248</bias>
+<bias>2.29538</bias>
+<bias>2.18511</bias>
+<bias>3.05221</bias>
+<bias>1.56444</bias>
        </bias_table><!--B_BB-->
 		</config>
 		<output>

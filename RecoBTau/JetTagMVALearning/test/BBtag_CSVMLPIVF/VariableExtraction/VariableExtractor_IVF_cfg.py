@@ -51,6 +51,8 @@ process.myak5JetTracksAssociatorAtVertex = cms.EDProducer("JetTracksAssociatorAt
 from RecoBTag.Configuration.RecoBTag_cff import *
 process.impactParameterTagInfos.jetTracks = cms.InputTag("myak5JetTracksAssociatorAtVertex")
 process.combinedSecondaryVertexV2.trackMultiplicityMin = cms.uint32(2)
+process.combinedSecondaryVertexV2.useRecoReco = cms.bool(True)
+#Set to true if you want to Use RecoReco vertex category
 
 
 #for Inclusive Vertex Finder
@@ -64,9 +66,8 @@ process.selectedHadronsAndPartons = selectedHadronsAndPartons.clone()
 from PhysicsTools.JetMCAlgos.AK5PFJetsMCFlavourInfos_cfi import ak5JetFlavourInfos
 process.jetFlavourInfosAK5PFJets = ak5JetFlavourInfos.clone()
 process.jetFlavourInfosAK5PFJets.jets = cms.InputTag("ak5PFJets")
+process.jetFlavourInfosAK5PFJets.useBBFlavour = cms.bool(False)
 
-##Enable JetFlavourInfo for your PAT jets
-#getattr(process,'patJet').addJetFlavourInfo = cms.bool(True)
 
 process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(-1)
@@ -92,17 +93,19 @@ process.source = cms.Source("PoolSource",
 #'/store/mc/Summer12_DR53X/GravitonToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V7C-v1/10000/5AA2B0E1-DE9E-E211-B84D-002590596498.root',
 #'/store/mc/Summer12_DR53X/GravitonToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V7C-v1/10000/82971E2B-C99E-E211-94A0-002590593902.root'
 # '/store/mc/Summer12_DR53X/QCD_Pt-800to1000_TuneZ2star_8TeV_pythia6/AODSIM/PU_S10_START53_V7A-v2/00000/00034183-BB0C-E211-A112-003048FFCBA4.root'
-'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/0E14124B-D912-E311-9D53-003048679076.root',
-'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/1A6A1A10-BE12-E311-AEC6-003048678B8E.root',
-'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/1AEA85EC-C312-E311-B5E0-003048679188.root',
-'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/1C9EB183-A012-E311-A20C-0026189438B5.root',
-'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/1EFF13FC-C612-E311-B33E-00261894397A.root',
-'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/3A284FC6-C212-E311-B858-0026189438D6.root',
-'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/40D18E41-CC12-E311-99F9-003048FF9AA6.root',
-'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/42692558-A812-E311-A4A3-0025905964C2.root',
-'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/48E87132-C012-E311-8451-003048FFD752.root',
-'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/6A779686-E612-E311-897F-002618943874.root'
- )
+#'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/0E14124B-D912-E311-9D53-003048679076.root',
+#'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/1A6A1A10-BE12-E311-AEC6-003048678B8E.root',
+#'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/1AEA85EC-C312-E311-B5E0-003048679188.root',
+#'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/1C9EB183-A012-E311-A20C-0026189438B5.root',
+#'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/1EFF13FC-C612-E311-B33E-00261894397A.root',
+#'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/3A284FC6-C212-E311-B858-0026189438D6.root',
+#'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/40D18E41-CC12-E311-99F9-003048FF9AA6.root',
+#'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/42692558-A812-E311-A4A3-0025905964C2.root',
+#'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/48E87132-C012-E311-8451-003048FFD752.root',
+#'/store/mc/Summer12_DR53X/RadionToHH_4b_M-1000_TuneZ2star_8TeV-Madgraph_pythia6/AODSIM/PU_S10_START53_V19-v1/20000/6A779686-E612-E311-897F-002618943874.root'
+ '/store/mc/Summer12_DR53X/QCD_Pt-15to3000_TuneZ2star_Flat_8TeV_pythia6/AODSIM/PU_S10_START53_V7A-v1/0000/004CB136-A1D3-E111-B958-0030487E4B8D.root',
+ '/store/mc/Summer12_DR53X/QCD_Pt-15to3000_TuneZ2star_Flat_8TeV_pythia6/AODSIM/PU_S10_START53_V7A-v1/0000/007D8FA7-B7D3-E111-B904-003048F0E1B0.root',
+ '/store/mc/Summer12_DR53X/QCD_Pt-15to3000_TuneZ2star_Flat_8TeV_pythia6/AODSIM/PU_S10_START53_V7A-v1/0000/00E7FCBF-C2D3-E111-A9D5-003048F0E194.root')
 )
 
 

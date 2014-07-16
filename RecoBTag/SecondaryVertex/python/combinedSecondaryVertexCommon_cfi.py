@@ -16,5 +16,6 @@ combinedSecondaryVertexCommon = cms.PSet(
 	minimumTrackWeight = cms.double(0.5),
 	pseudoVertexV0Filter = cms.PSet(k0sMassWindow = cms.double(0.05)),
 	trackMultiplicityMin = cms.uint32(2),
-	trackSort = cms.string('sip2dSig')
+	trackSort = cms.string('sip2dSig'),
+	useRecoReco = cms.bool(False)
 )

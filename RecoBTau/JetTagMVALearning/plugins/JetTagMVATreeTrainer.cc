@@ -149,7 +149,7 @@ class JetTagMVATreeTrainer : public edm::EDAnalyzer {
 //	TFile* outfile;	
 	
 	TH2D* histo_B_lin; 
-	TH2D* histo_C_lin;
+//	TH2D* histo_C_lin;
 	TH2D* histo_BB_lin;	
 //	TH2D* histo2D_B_reweighted_lin;
 //	TH2D* histo2D_C_reweighted_lin;
@@ -196,7 +196,7 @@ JetTagMVATreeTrainer::JetTagMVATreeTrainer(const edm::ParameterSet &params) :
 	
 	//for non-fit reweighting
 	TFile* infile_B = 0;
-	TFile* infile_C = 0;
+//	TFile* infile_C = 0;
 	TFile* infile_BB = 0;
 /* 	
 	if(params.getParameter<std::string>("calibrationRecord") == "CombinedSVRecoVertex")
@@ -235,7 +235,7 @@ JetTagMVATreeTrainer::JetTagMVATreeTrainer(const edm::ParameterSet &params) :
 		  calibRecordFound = true;
 			TString tmp = (TString) calibRecords[i] ;
 			infile_B = TFile::Open(tmp+"_B_histo.root");
-		  infile_C = TFile::Open(tmp+"_C_histo.root");
+//		  infile_C = TFile::Open(tmp+"_C_histo.root");
 		  infile_BB = TFile::Open(tmp+"_BB_histo.root");		
 		} 
  		else if(i==16 && calibRecordFound == false)
@@ -245,7 +245,7 @@ JetTagMVATreeTrainer::JetTagMVATreeTrainer(const edm::ParameterSet &params) :
 	}
 	//flatten in linear scale of pt
 	histo_B_lin = (TH2D*) infile_B->Get("jets_lin");
-	histo_C_lin = (TH2D*) infile_C->Get("jets_lin");
+//	histo_C_lin = (TH2D*) infile_C->Get("jets_lin");
 	histo_BB_lin = (TH2D*) infile_BB->Get("jets_lin");	
 //	histo2D_B_reweighted_lin = new TH2D("h_2D_B_reweighted_lin","h_2D_B_reweighted_lin",50, -2.5, 2.5, 40, 15., 1000.);
 //	histo2D_C_reweighted_lin = new TH2D("h_2D_C_reweighted_lin","h_2D_C_reweighted_lin",50, -2.5, 2.5, 40, 15., 1000.);
@@ -433,10 +433,10 @@ void JetTagMVATreeTrainer::analyze(const edm::Event& event,
 	      //non-fit reweighting: jet weight is inverse of bin content of the bin in which the jet resides in the 2D pt,eta histogram
 	      double weight = 1;
 				float bincontent_B_lin = 0;
-				float bincontent_C_lin = 0;
+//				float bincontent_C_lin = 0;
 				float bincontent_BB_lin = 0;
 				bincontent_B_lin = histo_B_lin->GetBinContent( histo_B_lin->FindBin(jetEta,jetPt) );
-				bincontent_C_lin = histo_C_lin->GetBinContent( histo_C_lin->FindBin(jetEta,jetPt) );
+//				bincontent_C_lin = histo_C_lin->GetBinContent( histo_C_lin->FindBin(jetEta,jetPt) );
 				bincontent_BB_lin = histo_BB_lin->GetBinContent( histo_BB_lin->FindBin(jetEta,jetPt) );
 				
 				if(flavour == 5){
@@ -444,12 +444,12 @@ void JetTagMVATreeTrainer::analyze(const edm::Event& event,
 //					 histo2D_B_reweighted_lin->Fill(jetEta,jetPt,weight);
 					//std::cout << "bincontent B: " << bincontent_B_lin << " so that weight is: " << weight << std::endl;
 				}
-				else if(flavour == 4)
-				{
-					 weight = 1./bincontent_C_lin;
-//					 histo2D_C_reweighted_lin->Fill(jetEta,jetPt,weight);
-					//std::cout << "bincontent C: " << bincontent_C_lin << " so that weight is: " << weight << std::endl;
-					}
+// 				else if(flavour == 4)
+// 				{
+// 					 weight = 1./bincontent_C_lin;
+// //					 histo2D_C_reweighted_lin->Fill(jetEta,jetPt,weight);
+// 					//std::cout << "bincontent C: " << bincontent_C_lin << " so that weight is: " << weight << std::endl;
+// 					}
 				else
 				  if(flavour == 9)
 				{				   
@@ -457,6 +457,8 @@ void JetTagMVATreeTrainer::analyze(const edm::Event& event,
 //					 histo2D_BB_reweighted_lin->Fill(jetEta,jetPt,weight);
 					//std::cout << "bincontent BB: " << bincontent_BB_lin << " so that weight is: " << weight << std::endl;
 				}
+				else
+				std::cout<<"Unknown flavour, abort operation!"<<std::endl;
 				
 				// if weights are too small this might be suboptimal for the training
 				//weight = weight * 100;
