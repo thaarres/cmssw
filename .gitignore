@@ -1,2 +1,9 @@
 __init__.py
 *.pyc
+*.html
+*.root
+*.txt
+*.pdf
+*.png
+crab_*
+
