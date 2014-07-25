@@ -106,6 +106,8 @@ class EffPurFromHistos {
   MonitorElement * EffFlavVsBEff_dus  ;
   MonitorElement * EffFlavVsBEff_dusg ;
   MonitorElement * EffFlavVsBEff_bb   ; 
+  MonitorElement * EffFlavVsBBEff_b  ;
+  MonitorElement * EffFlavVsBBEff_bb   ;
   //  DQMStore * dqmStore_; 
   std::string label_;
 

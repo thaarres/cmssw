@@ -183,7 +183,7 @@ FlavourHistograms<T>::FlavourHistograms (const std::string& baseNameTitle_ , con
       theHisto_ni    = (prov.book1D ( theBaseNameTitle + "NI"   , theBaseNameDescription + " ni-jets"   , theNBins , theLowerBound , theUpperBound )) ; 
       theHisto_dus   = (prov.book1D ( theBaseNameTitle + "DUS"  , theBaseNameDescription + " dus-jets"  , theNBins , theLowerBound , theUpperBound )) ; 
       theHisto_dusg  = (prov.book1D ( theBaseNameTitle + "DUSG" , theBaseNameDescription + " dusg-jets" , theNBins , theLowerBound , theUpperBound )) ;
-      theHisto_bb    = (prov.book1D ( theBaseNameTitle + "BB  " , theBaseNameDescription + " bb  -jets" , theNBins , theLowerBound , theUpperBound )) ;
+      theHisto_bb    = (prov.book1D ( theBaseNameTitle + "BB  " , theBaseNameDescription + " bb-jets" , theNBins , theLowerBound , theUpperBound )) ;
     }else{
       theHisto_d = 0;
       theHisto_u = 0;

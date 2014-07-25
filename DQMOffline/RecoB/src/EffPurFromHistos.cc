@@ -273,7 +273,8 @@ void EffPurFromHistos::plot (TPad * plotCanvas /* = 0 */) {
   EffFlavVsBEff_dus ->getTH1F()-> SetMinimum(0.01);
   EffFlavVsBEff_dusg ->getTH1F()-> SetMinimum(0.01);
   EffFlavVsBEff_bb ->getTH1F()-> SetMinimum(0.01);
-
+  EffFlavVsBBEff_b ->getTH1F()-> SetMinimum(0.01);
+  EffFlavVsBBEff_bb ->getTH1F()-> SetMinimum(0.01);
   // plot separately u,d and s
 //  EffFlavVsBEff_d ->GetXaxis()->SetTitle ( "b-jet efficiency" );
 //  EffFlavVsBEff_d ->GetYaxis()->SetTitle ( "non b-jet efficiency" );
@@ -325,7 +326,7 @@ void EffPurFromHistos::check () {
   const int& nBins_ni   = effVersusDiscr_ni   -> GetNbinsX();
   const int& nBins_dus  = effVersusDiscr_dus  -> GetNbinsX();
   const int& nBins_dusg = effVersusDiscr_dusg -> GetNbinsX();
-  const int& nBins_bb   = effVersusDiscr_bb   -> GetNbinsX();
+  const int& nBins_bb   = effVersusDiscr_bb   -> GetNbinsY();
   
   const bool& lNBins =
     ( nBins_d == nBins_u    &&
@@ -417,6 +418,8 @@ void EffPurFromHistos::compute ()
        EffFlavVsBEff_dus = 0; 
        EffFlavVsBEff_dusg = 0; 
        EffFlavVsBEff_bb = 0;
+       EffFlavVsBBEff_b = 0;
+       EffFlavVsBBEff_bb = 0;
     return; 
  
   }
@@ -438,8 +441,9 @@ void EffPurFromHistos::compute ()
   EffFlavVsBEff_g    = (prov.book1D ( hB + "G"    + hE , hB + "G"    + hE , nBinOutput , startOutput , endOutput )) ;
   EffFlavVsBEff_ni   = (prov.book1D ( hB + "NI"   + hE , hB + "NI"   + hE , nBinOutput , startOutput , endOutput )) ;
   EffFlavVsBEff_dus  = (prov.book1D ( hB + "DUS"  + hE , hB + "DUS"  + hE , nBinOutput , startOutput , endOutput )) ;
-  EffFlavVsBEff_dusg = (prov.book1D ( hB + "DUSG" + hE , hB + "DUSG" + hE , nBinOutput , startOutput , endOutput )) ;
-  EffFlavVsBEff_bb   = (prov.book1D ( hB + "BB  " + hE , hB + "BB  " + hE , nBinOutput , startOutput , endOutput )) ;
+  EffFlavVsBEff_dusg = (prov.book1D ( hB + "DUSG" + hE , hB + "DUSG" + hE , nBinOutput , startOutput , endOutput )) ;   EffFlavVsBEff_bb   = (prov.book1D ( hB + "BB"   + hE , hB + "BB"   + hE , nBinOutput , startOutput , endOutput )) ;
+  EffFlavVsBBEff_b   = (prov.book1D ( "FlavEffVsBBEff_B"     + hE , "FlavEffVsBBEff_B"    + hE , nBinOutput , startOutput , endOutput )) ;
+  EffFlavVsBBEff_bb  = (prov.book1D ( "FlavEffVsBBEff_BB"    + hE , "FlavEffVsBBEff_BB"   + hE , nBinOutput , startOutput , endOutput )) ;
   
   EffFlavVsBEff_d->getTH1F()->SetXTitle ( "b-jet efficiency" );
   EffFlavVsBEff_d->getTH1F()->SetYTitle ( "non b-jet efficiency" );
@@ -481,12 +485,19 @@ void EffPurFromHistos::compute ()
   EffFlavVsBEff_bb->getTH1F()->SetYTitle ( "bb-jet efficiency" );
   EffFlavVsBEff_bb->getTH1F()->GetXaxis()->SetTitleOffset ( 0.75 );
   EffFlavVsBEff_bb->getTH1F()->GetYaxis()->SetTitleOffset ( 0.75 );
-
+  EffFlavVsBBEff_b->getTH1F()->SetYTitle ( "b-jet efficiency" );
+  EffFlavVsBBEff_b->getTH1F()->SetXTitle ( "bb-jet efficiency" );
+  EffFlavVsBBEff_b->getTH1F()->GetXaxis()->SetTitleOffset ( 0.75 );
+  EffFlavVsBBEff_b->getTH1F()->GetYaxis()->SetTitleOffset ( 0.75 );
+  EffFlavVsBBEff_bb->getTH1F()->SetYTitle ( "bb-jet efficiency" );
+  EffFlavVsBBEff_bb->getTH1F()->SetXTitle ( "bb-jet efficiency" );
+  EffFlavVsBBEff_bb->getTH1F()->GetXaxis()->SetTitleOffset ( 0.75 );
+  EffFlavVsBBEff_bb->getTH1F()->GetYaxis()->SetTitleOffset ( 0.75 );
   // loop over eff. vs. discriminator cut b-histo and look in which bin the closest entry is;
   // use fact that eff decreases monotonously
 
   // any of the histos to be created can be taken here:
-  MonitorElement * EffFlavVsBEff = EffFlavVsBEff_b;
+  MonitorElement * EffFlavVsBEff = EffFlavVsBEff_bb;
 
   const int& nBinB = EffFlavVsBEff->getTH1F()->GetNbinsX();
 
@@ -497,7 +508,7 @@ void EffPurFromHistos::compute ()
     const float& effBLeft     = effBMid - 0.5*effBBinWidth;              // left edge of bin
     const float& effBRight    = effBMid + 0.5*effBBinWidth;              // right edge of bin
     // find the corresponding bin in the efficiency versus discriminator cut histo: closest one in efficiency
-    const int&   binClosest = findBinClosestYValue ( effVersusDiscr_b , effBMid , effBLeft , effBRight );
+    const int&   binClosest = findBinClosestYValue ( effVersusDiscr_bb , effBMid , effBLeft , effBRight );
     const bool&  binFound   = ( binClosest > 0 ) ;
     //
     if ( binFound ) {
@@ -511,7 +522,9 @@ void EffPurFromHistos::compute ()
       EffFlavVsBEff_ni   -> Fill ( effBMid , effVersusDiscr_ni  ->GetBinContent ( binClosest ) );
       EffFlavVsBEff_dus  -> Fill ( effBMid , effVersusDiscr_dus ->GetBinContent ( binClosest ) );
       EffFlavVsBEff_dusg -> Fill ( effBMid , effVersusDiscr_dusg->GetBinContent ( binClosest ) );
-      EffFlavVsBEff_bb   -> Fill ( effBMid , effVersusDiscr_bb->GetBinContent ( binClosest ) );
+      EffFlavVsBEff_bb   -> Fill ( effBMid , effVersusDiscr_b	->GetBinContent ( binClosest ) );
+      EffFlavVsBBEff_b   -> Fill ( effBMid , effVersusDiscr_b	->GetBinContent ( binClosest ) );
+      EffFlavVsBBEff_bb  -> Fill ( effBMid , effVersusDiscr_bb	->GetBinContent ( binClosest ) );
       
       EffFlavVsBEff_d  ->getTH1F()  -> SetBinError ( iBinB , effVersusDiscr_d   ->GetBinError ( binClosest ) );
       EffFlavVsBEff_u  ->getTH1F()  -> SetBinError ( iBinB , effVersusDiscr_u   ->GetBinError ( binClosest ) );
@@ -522,7 +535,9 @@ void EffPurFromHistos::compute ()
       EffFlavVsBEff_ni ->getTH1F()  -> SetBinError ( iBinB , effVersusDiscr_ni  ->GetBinError ( binClosest ) );
       EffFlavVsBEff_dus->getTH1F()  -> SetBinError ( iBinB , effVersusDiscr_dus ->GetBinError ( binClosest ) );
       EffFlavVsBEff_dusg->getTH1F() -> SetBinError ( iBinB , effVersusDiscr_dusg->GetBinError ( binClosest ) );
-      EffFlavVsBEff_bb->getTH1F() -> SetBinError ( iBinB , effVersusDiscr_bb->GetBinError ( binClosest ) );
+      EffFlavVsBEff_bb->getTH1F()   -> SetBinError ( iBinB , effVersusDiscr_b   ->GetBinError ( binClosest ) );
+      EffFlavVsBBEff_b->getTH1F()   -> SetBinError ( iBinB , effVersusDiscr_b   ->GetBinError ( binClosest ) );
+      EffFlavVsBBEff_bb->getTH1F()  -> SetBinError ( iBinB , effVersusDiscr_bb   ->GetBinError ( binClosest ) );  
     }
     else {
       //CW      cout << "Did not find right bin for b-efficiency : " << effBMid << endl;
