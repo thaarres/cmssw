@@ -32,7 +32,7 @@ BTagDifferentialPlot::BTagDifferentialPlot (const double& bEff, const ConstVarTy
 	theDifferentialHistoB_ni   ( 0 ) ,
 	theDifferentialHistoB_dus  ( 0 ) ,
 	theDifferentialHistoB_dusg ( 0 ) ,
-	theDifferentialHistoB_bb   ( 0 ) {}
+	theDifferentialHistoBB_b   ( 0 ) {}
 
 
 BTagDifferentialPlot::~BTagDifferentialPlot () {
@@ -148,12 +148,12 @@ void BTagDifferentialPlot::plot (TCanvas & thePlotCanvas ) {
   theDifferentialHistoB_g   ->getTH1F()-> SetStats     ( false ) ;
   theDifferentialHistoB_g   ->getTH1F()-> Draw("peSame") ;
 
-  theDifferentialHistoB_bb   ->getTH1F()-> SetMarkerColor ( col_bb ) ;
-  theDifferentialHistoB_bb   ->getTH1F()-> SetLineColor   ( col_bb ) ;
-  theDifferentialHistoB_bb   ->getTH1F()-> SetMarkerSize  ( mSize ) ;
-  theDifferentialHistoB_bb   ->getTH1F()-> SetMarkerStyle ( mStyle_bb ) ;
-  theDifferentialHistoB_bb   ->getTH1F()-> SetStats     ( false ) ;
-  theDifferentialHistoB_bb   ->getTH1F()-> Draw("peSame") ;
+  theDifferentialHistoBB_b   ->getTH1F()-> SetMarkerColor ( col_bb ) ;
+  theDifferentialHistoBB_b   ->getTH1F()-> SetLineColor   ( col_bb ) ;
+  theDifferentialHistoBB_b   ->getTH1F()-> SetMarkerSize  ( mSize ) ;
+  theDifferentialHistoBB_b   ->getTH1F()-> SetMarkerStyle ( mStyle_bb ) ;
+  theDifferentialHistoBB_b   ->getTH1F()-> SetStats     ( false ) ;
+  theDifferentialHistoBB_b   ->getTH1F()-> Draw("peSame") ;
   // NI if wanted
   if ( btppNI ) {
     theDifferentialHistoB_ni ->getTH1F()-> SetMarkerColor ( col_ni ) ;
@@ -272,7 +272,7 @@ void BTagDifferentialPlot::bookHisto () {
   theDifferentialHistoB_ni   = (prov.book1D ( "NI_"   + commonName , "NI_"   + commonName , nBins , binArray )) ;
   theDifferentialHistoB_dus  = (prov.book1D ( "DUS_"  + commonName , "DUS_"  + commonName , nBins , binArray )) ;
   theDifferentialHistoB_dusg = (prov.book1D ( "DUSG_" + commonName , "DUSG_" + commonName , nBins , binArray )) ;
-  theDifferentialHistoB_bb   = (prov.book1D ( "BB_"   + commonName , "BB_  " + commonName , nBins , binArray )) ;
+  theDifferentialHistoBB_b   = (prov.book1D ( "BB_"   + commonName , "BB_  " + commonName , nBins , binArray )) ;
 }
 
 
@@ -318,7 +318,7 @@ void BTagDifferentialPlot::fillHisto () {
     effPurDifferentialPairs.push_back ( make_pair ( currentEffPurFromHistos->getEffFlavVsBEff_ni()   , theDifferentialHistoB_ni ->getTH1F()  ) ) ;
     effPurDifferentialPairs.push_back ( make_pair ( currentEffPurFromHistos->getEffFlavVsBEff_dus()  , theDifferentialHistoB_dus->getTH1F()  ) ) ;
     effPurDifferentialPairs.push_back ( make_pair ( currentEffPurFromHistos->getEffFlavVsBEff_dusg() , theDifferentialHistoB_dusg->getTH1F() ) ) ;
-    effPurDifferentialPairs.push_back ( make_pair ( currentEffPurFromHistos->getEffFlavVsBEff_bb()   , theDifferentialHistoB_bb->getTH1F() ) ) ;
+    effPurDifferentialPairs.push_back ( make_pair ( currentEffPurFromHistos->getEffFlavVsBBEff_b()   , theDifferentialHistoBB_b->getTH1F() ) ) ;
 
     for ( vector< pair<TH1F*,TH1F*> >::const_iterator itP  = effPurDifferentialPairs.begin() ;
 	                                              itP != effPurDifferentialPairs.end()   ; ++itP ) {

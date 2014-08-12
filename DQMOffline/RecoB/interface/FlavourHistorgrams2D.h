@@ -83,7 +83,8 @@ public:
   inline TH2F * histo_ni   () const { return theHisto_ni->getTH2F()   ; }
   inline TH2F * histo_dus  () const { return theHisto_dus->getTH2F()  ; }
   inline TH2F * histo_dusg () const { return theHisto_dusg->getTH2F() ; }
-  inline TH2F * histo_bb () const { return theHisto_dusg->getTH2F() ; }
+  inline TH2F * histo_cdusg () const { return theHisto_cdusg->getTH2F() ; }
+  inline TH2F * histo_bb () const { return theHisto_bb->getTH2F() ; }
   
   TProfile * profile_all  () const { return theProfile_all->getTProfile()  ; }    
   TProfile * profile_d    () const { return theProfile_d ->getTProfile()   ; }    
@@ -95,6 +96,7 @@ public:
   TProfile * profile_ni   () const { return theProfile_ni->getTProfile()   ; }
   TProfile * profile_dus  () const { return theProfile_dus->getTProfile()  ; }
   TProfile * profile_dusg () const { return theProfile_dusg->getTProfile() ; }
+  TProfile * profile_cdusg () const { return theProfile_cdusg->getTProfile() ; }
   TProfile * profile_bb   () const { return theProfile_bb->getTProfile() ; }
   
   std::vector<TH2F*> getHistoVector() const;
@@ -140,6 +142,7 @@ protected:
   MonitorElement *theHisto_ni   ;
   MonitorElement *theHisto_dus  ;
   MonitorElement *theHisto_dusg ;
+  MonitorElement *theHisto_cdusg ;
   MonitorElement *theHisto_bb   ;
   
   // the profiles
@@ -153,6 +156,7 @@ protected:
   MonitorElement *theProfile_ni   ;
   MonitorElement *theProfile_dus  ;
   MonitorElement *theProfile_dusg ;
+  MonitorElement *theProfile_cdusg ;
   MonitorElement *theProfile_bb   ;
   //  DQMStore * dqmStore_; 
 
@@ -199,7 +203,8 @@ FlavourHistograms2D<T, G>::FlavourHistograms2D (TString baseNameTitle_ , TString
       theHisto_ni    = (prov.book2D ( theBaseNameTitle + "NI"   , theBaseNameDescription + " ni-jets"   , theNBinsX , theLowerBoundX , theUpperBoundX , theNBinsY, theLowerBoundY, theUpperBoundY)) ; 
       theHisto_dus   = (prov.book2D ( theBaseNameTitle + "DUS"  , theBaseNameDescription + " dus-jets"  , theNBinsX , theLowerBoundX , theUpperBoundX , theNBinsY, theLowerBoundY, theUpperBoundY)) ; 
       theHisto_dusg  = (prov.book2D ( theBaseNameTitle + "DUSG" , theBaseNameDescription + " dusg-jets" , theNBinsX , theLowerBoundX , theUpperBoundX , theNBinsY, theLowerBoundY, theUpperBoundY)) ;
-      theHisto_bb    = (prov.book2D ( theBaseNameTitle + "BB  " , theBaseNameDescription + " bb-jets"   , theNBinsX , theLowerBoundX , theUpperBoundX , theNBinsY, theLowerBoundY, theUpperBoundY)) ;
+      theHisto_cdusg  = (prov.book2D ( theBaseNameTitle + "CDUSG" , theBaseNameDescription + " cdusg-jets" , theNBinsX , theLowerBoundX , theUpperBoundX , theNBinsY, theLowerBoundY, theUpperBoundY)) ;
+     theHisto_bb    = (prov.book2D ( theBaseNameTitle + "BB  " , theBaseNameDescription + " bb-jets"   , theNBinsX , theLowerBoundX , theUpperBoundX , theNBinsY, theLowerBoundY, theUpperBoundY)) ;
     }else{
       theHisto_d = 0;
       theHisto_u = 0;
@@ -210,6 +215,7 @@ FlavourHistograms2D<T, G>::FlavourHistograms2D (TString baseNameTitle_ , TString
       theHisto_ni = 0;
       theHisto_dus = 0;
       theHisto_dusg = 0;
+      theHisto_cdusg = 0;
       theHisto_bb = 0;
     }
 
@@ -225,6 +231,7 @@ FlavourHistograms2D<T, G>::FlavourHistograms2D (TString baseNameTitle_ , TString
         theProfile_ni    = (prov.bookProfile ( theBaseNameTitle + "_Profile_NI"   , theBaseNameDescription + " ni-jets"   , theNBinsX , theLowerBoundX , theUpperBoundX , theNBinsY, theLowerBoundY, theUpperBoundY)) ; 
         theProfile_dus   = (prov.bookProfile ( theBaseNameTitle + "_Profile_DUS"  , theBaseNameDescription + " dus-jets"  , theNBinsX , theLowerBoundX , theUpperBoundX , theNBinsY, theLowerBoundY, theUpperBoundY)) ; 
         theProfile_dusg  = (prov.bookProfile ( theBaseNameTitle + "_Profile_DUSG" , theBaseNameDescription + " dusg-jets" , theNBinsX , theLowerBoundX , theUpperBoundX , theNBinsY, theLowerBoundY, theUpperBoundY)) ;
+	theProfile_cdusg  = (prov.bookProfile ( theBaseNameTitle + "_Profile_CDUSG" , theBaseNameDescription + " cdusg-jets" , theNBinsX , theLowerBoundX , theUpperBoundX , theNBinsY, theLowerBoundY, theUpperBoundY)) ;
 	theProfile_bb    = (prov.bookProfile ( theBaseNameTitle + "_Profile_BB  " , theBaseNameDescription + " bb-jets"   , theNBinsX , theLowerBoundX , theUpperBoundX , theNBinsY, theLowerBoundY, theUpperBoundY)) ;
       } else{
           theProfile_d = 0;
@@ -236,6 +243,7 @@ FlavourHistograms2D<T, G>::FlavourHistograms2D (TString baseNameTitle_ , TString
           theProfile_ni = 0;
           theProfile_dus = 0;
           theProfile_dusg = 0;
+	  theProfile_cdusg = 0;
 	  theProfile_bb = 0;
       } 
     }  else {
@@ -249,6 +257,7 @@ FlavourHistograms2D<T, G>::FlavourHistograms2D (TString baseNameTitle_ , TString
           theProfile_ni = 0;
           theProfile_dus = 0;
           theProfile_dusg = 0;
+	  theProfile_cdusg = 0;
 	  theProfile_bb = 0;
     }
       // statistics if requested
@@ -266,6 +275,7 @@ FlavourHistograms2D<T, G>::FlavourHistograms2D (TString baseNameTitle_ , TString
 	theHisto_ni  ->getTH2F()->Sumw2() ; 
 	theHisto_dus ->getTH2F()->Sumw2() ; 
 	theHisto_dusg->getTH2F()->Sumw2() ;
+	theHisto_cdusg->getTH2F()->Sumw2() ;
 	theHisto_bb  ->getTH2F()->Sumw2() ;
 
         if(createProfile) {
@@ -295,6 +305,7 @@ FlavourHistograms2D<T, G>::FlavourHistograms2D (TString baseNameTitle_ , TString
       theHisto_ni    =prov.access(theBaseNameTitle + "NI"  ) ; 
       theHisto_dus   =prov.access(theBaseNameTitle + "DUS" ) ; 
       theHisto_dusg  =prov.access(theBaseNameTitle + "DUSG") ;
+      theHisto_cdusg  =prov.access(theBaseNameTitle + "CDUSG") ;
       theHisto_bb    =prov.access(theBaseNameTitle + "BB"  ) ;
     }
 
@@ -310,6 +321,7 @@ FlavourHistograms2D<T, G>::FlavourHistograms2D (TString baseNameTitle_ , TString
         theProfile_ni    =prov.access(theBaseNameTitle + "_Profile_NI"  ) ; 
         theProfile_dus   =prov.access(theBaseNameTitle + "_Profile_DUS" ) ; 
         theProfile_dusg  =prov.access(theBaseNameTitle + "_Profile_DUSG") ;
+	theProfile_cdusg  =prov.access(theBaseNameTitle + "_Profile_CDUSG") ;
 	theProfile_bb    =prov.access(theBaseNameTitle + "_Profile_BB"  ) ;
       }
     }
@@ -392,6 +404,7 @@ void FlavourHistograms2D<T, G>::settitle(const char* titleX, const char* titleY)
       if(theHisto_ni) theHisto_ni  ->setAxisTitle(titleY, 2) ;
       if(theHisto_dus) theHisto_dus ->setAxisTitle(titleY, 2) ;
       if(theHisto_dusg)theHisto_dusg->setAxisTitle(titleY, 2) ;
+      if(theHisto_cdusg)theHisto_cdusg->setAxisTitle(titleY, 2) ;
       if(theHisto_bb)  theHisto_bb  ->setAxisTitle(titleY, 2) ;
     }
 
@@ -419,6 +432,7 @@ void FlavourHistograms2D<T, G>::settitle(const char* titleX, const char* titleY)
       if(theProfile_ni) theProfile_ni  ->setAxisTitle(titleY, 2) ;
       if(theProfile_dus) theProfile_dus ->setAxisTitle(titleY, 2) ;
       if(theProfile_dusg)theProfile_dusg->setAxisTitle(titleY, 2) ;
+      if(theProfile_cdusg)theProfile_cdusg->setAxisTitle(titleY, 2) ;
       if(theProfile_bb)  theProfile_bb  ->setAxisTitle(titleY, 2) ;
     }
   }
@@ -444,6 +458,7 @@ void FlavourHistograms2D<T, G>::divide ( const FlavourHistograms2D<T, G> & bHD )
       theHisto_ni   ->getTH2F()-> Divide ( theHisto_ni->getTH2F()   , bHD.histo_ni  () , 1.0 , 1.0 , "b" ) ;
       theHisto_dus  ->getTH2F()-> Divide ( theHisto_dus->getTH2F()  , bHD.histo_dus () , 1.0 , 1.0 , "b" ) ;
       theHisto_dusg ->getTH2F()-> Divide ( theHisto_dusg->getTH2F() , bHD.histo_dusg() , 1.0 , 1.0 , "b" ) ;
+      theHisto_cdusg ->getTH2F()-> Divide ( theHisto_cdusg->getTH2F() , bHD.histo_cdusg() , 1.0 , 1.0 , "b" ) ;
       theHisto_bb   ->getTH2F()-> Divide ( theHisto_bb->getTH2F()   , bHD.histo_bb  () , 1.0 , 1.0 , "b" ) ;
     }
 }
@@ -467,6 +482,7 @@ void FlavourHistograms2D<T, G>::fillVariable ( const int & flavour , const T & v
         theProfile_d->Fill(varX, varY);
         theProfile_dus->Fill(varX, varY);
         theProfile_dusg->Fill(varX, varY);
+	theProfile_cdusg->Fill(varX, varY);
       }
       return;
     case 2:
@@ -477,6 +493,7 @@ void FlavourHistograms2D<T, G>::fillVariable ( const int & flavour , const T & v
         theProfile_u->Fill(varX, varY);
         theProfile_dus->Fill(varX, varY);
         theProfile_dusg->Fill(varX, varY);
+	theProfile_cdusg->Fill(varX, varY);
       }
       return;
     case 3:
@@ -487,26 +504,32 @@ void FlavourHistograms2D<T, G>::fillVariable ( const int & flavour , const T & v
         theProfile_s->Fill(varX, varY);
         theProfile_dus->Fill(varX, varY);
         theProfile_dusg->Fill(varX, varY);
+	theProfile_cdusg->Fill(varX, varY);
       }
       return;
     case 4:
       theHisto_c->Fill( varX, varY );
-      if(createProfile_) theProfile_c->Fill(varX, varY);
+      if(createProfile_) {
+	theProfile_c->Fill(varX, varY);
+	theProfile_cdusg->Fill(varX, varY);
+      }
       return;
     case 5:
       theHisto_b->Fill( varX, varY );
       if(createProfile_) theProfile_b->Fill(varX, varY);
       return;
     case 9:
-      theHisto_b->Fill( varX, varY );
-      if(createProfile_) theProfile_b->Fill(varX, varY);
+      theHisto_bb->Fill( varX, varY );
+      if(createProfile_) theProfile_bb->Fill(varX, varY);
       return;
     case 21:
       theHisto_g->Fill( varX, varY );
       theHisto_dusg->Fill( varX, varY );
+      theHisto_cdusg->Fill( varX, varY );
       if(createProfile_) {
         theProfile_g->Fill(varX, varY);
         theProfile_dusg->Fill(varX, varY);
+	theProfile_cdusg->Fill(varX, varY);
       }
       return;
     default:
@@ -531,6 +554,7 @@ std::vector<TH2F*> FlavourHistograms2D<T, G>::getHistoVector() const
       histoVector.push_back ( theHisto_ni->getTH2F()  );
       histoVector.push_back ( theHisto_dus->getTH2F() );
       histoVector.push_back ( theHisto_dusg->getTH2F());
+      histoVector.push_back ( theHisto_cdusg->getTH2F());
       histoVector.push_back ( theHisto_bb->getTH2F());
     }
   return histoVector;
@@ -552,6 +576,7 @@ std::vector<TProfile*> FlavourHistograms2D<T, G>::getProfileVector() const
         profileVector.push_back ( theProfile_ni->getTProfile()  );
         profileVector.push_back ( theProfile_dus->getTProfile() );
         profileVector.push_back ( theProfile_dusg->getTProfile());
+	profileVector.push_back ( theProfile_cdusg->getTProfile());
 	profileVector.push_back ( theProfile_bb->getTProfile());
       }
   }

@@ -347,7 +347,7 @@ CombinedSVComputerV2::operator () (const TrackIPTagInfo &ipInfo,
 		math::XYZTLorentzVector allSum = useTrackWeights ? allKinematics.weightedVectorSum() : allKinematics.vectorSum();
 		math::XYZTLorentzVector vertexSum = useTrackWeights ? vertexKinematics.weightedVectorSum() : vertexKinematics.vectorSum();
 
-		if (vtxType != btag::Vertices::RecoVertex) {
+		if (vtxType != btag::Vertices::RecoVertex && vtxType != btag::Vertices::RecoRecoVertex ) {
 			vars.insert(btau::vertexNTracks,vertexKinematics.numberOfTracks(), true);
 			vars.insert(btau::vertexJetDeltaR,VectorUtil::DeltaR(vertexSum, jetDir), true);
 		}
@@ -355,7 +355,7 @@ CombinedSVComputerV2::operator () (const TrackIPTagInfo &ipInfo,
 		double vertexMass = vertexSum.M();
 		double varPi = 0;
 		double varB = 0;
-		if (vtxType == btag::Vertices::RecoVertex) {
+		if (vtxType == btag::Vertices::RecoVertex || vtxType == btag::Vertices::RecoRecoVertex) {
 			if(vertexMassCorrection)
 			{
 				GlobalVector dir = svInfo.flightDirection(vtx);

@@ -54,17 +54,17 @@ JetTagPlotter::JetTagPlotter (const std::string & tagName, const EtaPtBin & etaP
 
     // Discriminator: again with reasonable binning
   dDiscriminator = new FlavourHistograms<double>
-	("discr" + es, "Discriminator", 100, discrStart_, discrEnd_,
+	("discr" + es, "Discriminator", 500, discrStart_, discrEnd_,
 	false, true, true, "b", update,jetTagDir, mcPlots_);
   dDiscriminator->settitle("Discriminant");
     // reconstructed jet momentum
   dJetRecMomentum = new FlavourHistograms<double>
-	("jetMomentum" + es, "jet momentum", 200, 0.0, 200.0,
+	("jetMomentum" + es, "jet momentum", 1200, 0.0, 1200.0,
 	false, false, true, "b", update,jetTagDir, mcPlots_);
 
   // reconstructed jet transverse momentum
   dJetRecPt = new FlavourHistograms<double>
-	("jetPt" + es, "jet pt", 200, 0.0, 200.0,
+	("jetPt" + es, "jet pt", 1200, 0.0, 1200.0,
 	false, false, true, "b", update,jetTagDir, mcPlots_);
 
   // reconstructed jet eta

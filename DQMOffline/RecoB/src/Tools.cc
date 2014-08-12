@@ -149,7 +149,7 @@ TObjArray RecoBTag::getHistArray ( TFile * histoFile , const std::string& baseNa
   // return the TObjArray built from the basename
   //
   //
-  TObjArray histos (3) ;  // reserve 3
+  TObjArray histos (4) ;  // reserve 3
   //
   const std::string nameB    ( baseName + "B" ) ;
   const std::string nameC    ( baseName + "C" ) ;
@@ -201,6 +201,7 @@ bool RecoBTag::flavourIsG ( const int & flav ) { return flav == 21 ; }
 
 bool RecoBTag::flavourIsDUS  ( const int & flav ) { return ( flavourIsD(flav) || flavourIsU(flav) || flavourIsS(flav) ) ; }
 bool RecoBTag::flavourIsDUSG ( const int & flav ) { return ( flavourIsDUS(flav) || flavourIsG(flav) ) ; }
+bool RecoBTag::flavourIsCDUSG ( const int & flav ) { return ( flavourIsDUS(flav) || flavourIsG(flav) || flavourIsC(flav) ) ; }
 
 bool RecoBTag::flavourIsNI  ( const int & flav ) { return !( flavourIsD(flav) || flavourIsU(flav) || flavourIsS(flav) ||
 						 flavourIsC(flav) || flavourIsB(flav) || flavourIsG(flav)    ) ; }

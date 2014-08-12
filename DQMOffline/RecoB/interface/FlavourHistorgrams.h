@@ -87,6 +87,7 @@ public:
   inline TH1F * histo_ni   () const { return theHisto_ni->getTH1F()   ; }
   inline TH1F * histo_dus  () const { return theHisto_dus->getTH1F()  ; }
   inline TH1F * histo_dusg () const { return theHisto_dusg->getTH1F() ; }
+  inline TH1F * histo_cdusg () const { return theHisto_cdusg->getTH1F() ; }
   inline TH1F * histo_bb   () const { return theHisto_bb->getTH1F() ; }
   
   std::vector<TH1F*> getHistoVector() const;
@@ -129,6 +130,7 @@ protected:
   MonitorElement *theHisto_ni   ;
   MonitorElement *theHisto_dus  ;
   MonitorElement *theHisto_dusg ;
+  MonitorElement *theHisto_cdusg ;
   MonitorElement *theHisto_bb   ;
   
   //  DQMStore * dqmStore_; 
@@ -183,6 +185,7 @@ FlavourHistograms<T>::FlavourHistograms (const std::string& baseNameTitle_ , con
       theHisto_ni    = (prov.book1D ( theBaseNameTitle + "NI"   , theBaseNameDescription + " ni-jets"   , theNBins , theLowerBound , theUpperBound )) ; 
       theHisto_dus   = (prov.book1D ( theBaseNameTitle + "DUS"  , theBaseNameDescription + " dus-jets"  , theNBins , theLowerBound , theUpperBound )) ; 
       theHisto_dusg  = (prov.book1D ( theBaseNameTitle + "DUSG" , theBaseNameDescription + " dusg-jets" , theNBins , theLowerBound , theUpperBound )) ;
+      theHisto_cdusg  = (prov.book1D ( theBaseNameTitle + "CDUSG" , theBaseNameDescription + " cdusg-jets" , theNBins , theLowerBound , theUpperBound )) ;
       theHisto_bb    = (prov.book1D ( theBaseNameTitle + "BB  " , theBaseNameDescription + " bb-jets" , theNBins , theLowerBound , theUpperBound )) ;
     }else{
       theHisto_d = 0;
@@ -194,6 +197,7 @@ FlavourHistograms<T>::FlavourHistograms (const std::string& baseNameTitle_ , con
       theHisto_ni = 0;
       theHisto_dus = 0;
       theHisto_dusg = 0;
+      theHisto_cdusg = 0;
       theHisto_bb = 0;
     }
       // statistics if requested
@@ -210,6 +214,7 @@ FlavourHistograms<T>::FlavourHistograms (const std::string& baseNameTitle_ , con
 	theHisto_ni  ->getTH1F()->Sumw2() ; 
 	theHisto_dus ->getTH1F()->Sumw2() ; 
 	theHisto_dusg->getTH1F()->Sumw2() ;
+	theHisto_cdusg->getTH1F()->Sumw2() ;
 	theHisto_bb  ->getTH1F()->Sumw2() ;
       }
     }
@@ -227,6 +232,7 @@ FlavourHistograms<T>::FlavourHistograms (const std::string& baseNameTitle_ , con
       theHisto_ni    =prov.access(theBaseNameTitle + "NI"  ) ; 
       theHisto_dus   =prov.access(theBaseNameTitle + "DUS" ) ; 
       theHisto_dusg  =prov.access(theBaseNameTitle + "DUSG") ;
+      theHisto_cdusg  =prov.access(theBaseNameTitle + "CDUSG") ;
       theHisto_bb    =prov.access(theBaseNameTitle + "BB") ;
     }
   }
@@ -301,6 +307,7 @@ void FlavourHistograms<T>::settitle(const char* title) {
       theHisto_ni  ->setAxisTitle(title) ;
       theHisto_dus ->setAxisTitle(title) ;
       theHisto_dusg->setAxisTitle(title) ;
+      theHisto_cdusg->setAxisTitle(title) ;
       theHisto_bb  ->setAxisTitle(title) ;
     }
 }
@@ -494,6 +501,7 @@ void FlavourHistograms<T>::divide ( const FlavourHistograms<T> & bHD ) const {
       theHisto_ni   ->getTH1F()-> Divide ( theHisto_ni->getTH1F()   , bHD.histo_ni  () , 1.0 , 1.0 , "b" ) ;
       theHisto_dus  ->getTH1F()-> Divide ( theHisto_dus->getTH1F()  , bHD.histo_dus () , 1.0 , 1.0 , "b" ) ;
       theHisto_dusg ->getTH1F()-> Divide ( theHisto_dusg->getTH1F() , bHD.histo_dusg() , 1.0 , 1.0 , "b" ) ;
+      theHisto_cdusg ->getTH1F()-> Divide ( theHisto_cdusg->getTH1F() , bHD.histo_cdusg() , 1.0 , 1.0 , "b" ) ;
       theHisto_bb   ->getTH1F()-> Divide ( theHisto_bb->getTH1F() , bHD.histo_bb() , 1.0 , 1.0 , "b" ) ;
     }
 }
@@ -511,19 +519,23 @@ void FlavourHistograms<T>::fillVariable ( const int & flavour , const T & var ) 
       theHisto_d->Fill( var );
       theHisto_dus->Fill( var );
       theHisto_dusg->Fill( var );
+      theHisto_cdusg->Fill( var );
       return;
     case 2:
       theHisto_u->Fill( var );
       theHisto_dus->Fill( var );
       theHisto_dusg->Fill( var );
+      theHisto_cdusg->Fill( var );
       return;
     case 3:
       theHisto_s->Fill( var );
       theHisto_dus->Fill( var );
       theHisto_dusg->Fill( var );
+      theHisto_cdusg->Fill( var );
       return;
     case 4:
       theHisto_c->Fill( var );
+      theHisto_cdusg->Fill( var );
       return;
     case 5:
       theHisto_b->Fill( var );
@@ -534,6 +546,7 @@ void FlavourHistograms<T>::fillVariable ( const int & flavour , const T & var ) 
     case 21:
       theHisto_g->Fill( var );
       theHisto_dusg->Fill( var );
+      theHisto_cdusg->Fill( var );
       return;
     default:
       theHisto_ni->Fill( var );
@@ -556,6 +569,7 @@ std::vector<TH1F*> FlavourHistograms<T>::getHistoVector() const
       histoVector.push_back ( theHisto_ni->getTH1F()  );
       histoVector.push_back ( theHisto_dus->getTH1F() );
       histoVector.push_back ( theHisto_dusg->getTH1F());
+      histoVector.push_back ( theHisto_cdusg->getTH1F());
       histoVector.push_back ( theHisto_bb->getTH1F());
     }
   return histoVector;

@@ -19,13 +19,13 @@ using namespace RecoBTag;
 
 EffPurFromHistos::EffPurFromHistos ( const std::string & ext, TH1F * h_d, TH1F * h_u,
 	TH1F * h_s, TH1F * h_c, TH1F * h_b, TH1F * h_g,	TH1F * h_ni,
-	TH1F * h_dus, TH1F * h_dusg, TH1F * h_bb, const std::string& label, const bool& mc, int nBin, double startO, double endO) :
+	TH1F * h_dus, TH1F * h_dusg,TH1F * h_cdusg, TH1F * h_bb, const std::string& label, const bool& mc, int nBin, double startO, double endO) :
 	//BTagPlotPrintC(),
         fromDiscriminatorDistr(false),
 	histoExtension(ext), effVersusDiscr_d(h_d), effVersusDiscr_u(h_u),
 	effVersusDiscr_s(h_s), effVersusDiscr_c(h_c), effVersusDiscr_b(h_b),
 	effVersusDiscr_g(h_g), effVersusDiscr_ni(h_ni), effVersusDiscr_dus(h_dus),
-	effVersusDiscr_dusg(h_dusg),effVersusDiscr_bb(h_bb),nBinOutput(nBin), startOutput(startO),
+	effVersusDiscr_dusg(h_dusg),effVersusDiscr_cdusg(h_cdusg),effVersusDiscr_bb(h_bb),nBinOutput(nBin), startOutput(startO),
 	endOutput(endO),  mcPlots_(mc), label_(label)
 {
   // consistency check
@@ -62,6 +62,7 @@ EffPurFromHistos::EffPurFromHistos
   effVersusDiscr_ni =   discrCutEfficScan->histo_ni  ();
   effVersusDiscr_dus =  discrCutEfficScan->histo_dus ();
   effVersusDiscr_dusg = discrCutEfficScan->histo_dusg();
+  effVersusDiscr_cdusg = discrCutEfficScan->histo_cdusg();
   effVersusDiscr_bb   = discrCutEfficScan->histo_bb();
   
 
@@ -83,6 +84,8 @@ EffPurFromHistos::EffPurFromHistos
   effVersusDiscr_dus->GetXaxis()->SetTitleOffset ( 0.75 );
   effVersusDiscr_dusg->SetXTitle ( "Discriminant" );
   effVersusDiscr_dusg->GetXaxis()->SetTitleOffset ( 0.75 );
+  effVersusDiscr_cdusg->SetXTitle ( "Discriminant" );
+  effVersusDiscr_cdusg->GetXaxis()->SetTitleOffset ( 0.75 );
   effVersusDiscr_bb->SetXTitle ( "Discriminant" );
   effVersusDiscr_bb->GetXaxis()->SetTitleOffset ( 0.75 );
   }else{
@@ -95,6 +98,7 @@ EffPurFromHistos::EffPurFromHistos
     effVersusDiscr_ni =    0;
     effVersusDiscr_dus =   0;
     effVersusDiscr_dusg =  0;
+    effVersusDiscr_cdusg =  0;
     effVersusDiscr_bb =  0;
 }
 
@@ -272,9 +276,10 @@ void EffPurFromHistos::plot (TPad * plotCanvas /* = 0 */) {
   EffFlavVsBEff_ni ->getTH1F()-> SetMinimum(0.01);
   EffFlavVsBEff_dus ->getTH1F()-> SetMinimum(0.01);
   EffFlavVsBEff_dusg ->getTH1F()-> SetMinimum(0.01);
-  EffFlavVsBEff_bb ->getTH1F()-> SetMinimum(0.01);
   EffFlavVsBBEff_b ->getTH1F()-> SetMinimum(0.01);
   EffFlavVsBBEff_bb ->getTH1F()-> SetMinimum(0.01);
+  EffFlavVsBBEff_dusg ->getTH1F()-> SetMinimum(0.01);
+  EffFlavVsBBEff_cdusg ->getTH1F()-> SetMinimum(0.01);
   // plot separately u,d and s
 //  EffFlavVsBEff_d ->GetXaxis()->SetTitle ( "b-jet efficiency" );
 //  EffFlavVsBEff_d ->GetYaxis()->SetTitle ( "non b-jet efficiency" );
@@ -326,6 +331,7 @@ void EffPurFromHistos::check () {
   const int& nBins_ni   = effVersusDiscr_ni   -> GetNbinsX();
   const int& nBins_dus  = effVersusDiscr_dus  -> GetNbinsX();
   const int& nBins_dusg = effVersusDiscr_dusg -> GetNbinsX();
+  const int& nBins_cdusg = effVersusDiscr_cdusg -> GetNbinsX();
   const int& nBins_bb   = effVersusDiscr_bb   -> GetNbinsY();
   
   const bool& lNBins =
@@ -337,6 +343,7 @@ void EffPurFromHistos::check () {
       nBins_d == nBins_ni   &&
       nBins_d == nBins_dus  &&
       nBins_d == nBins_dusg &&
+      nBins_d == nBins_cdusg &&
       nBins_d == nBins_bb       );
 
   if ( !lNBins ) {
@@ -355,6 +362,7 @@ void EffPurFromHistos::check () {
   const float& sBin_ni   = effVersusDiscr_ni   -> GetBinCenter(1);
   const float& sBin_dus  = effVersusDiscr_dus  -> GetBinCenter(1);
   const float& sBin_dusg = effVersusDiscr_dusg -> GetBinCenter(1);
+  const float& sBin_cdusg = effVersusDiscr_cdusg -> GetBinCenter(1);
   const float& sBin_bb   = effVersusDiscr_bb   -> GetBinCenter(1);
   
   const bool& lSBin =
@@ -366,6 +374,7 @@ void EffPurFromHistos::check () {
       sBin_d == sBin_ni   &&
       sBin_d == sBin_dus  &&
       sBin_d == sBin_dusg &&
+      sBin_d == sBin_cdusg &&
       sBin_d == sBin_bb       );
 
   if ( !lSBin ) {
@@ -384,6 +393,7 @@ void EffPurFromHistos::check () {
   const float& eBin_ni   = effVersusDiscr_ni   -> GetBinCenter( nBins_d - 1 );
   const float& eBin_dus  = effVersusDiscr_dus  -> GetBinCenter( nBins_d - 1 );
   const float& eBin_dusg = effVersusDiscr_dusg -> GetBinCenter( nBins_d - 1 );
+  const float& eBin_cdusg = effVersusDiscr_cdusg -> GetBinCenter( nBins_d - 1 );
   const float& eBin_bb   = effVersusDiscr_bb   -> GetBinCenter( nBins_d - 1 );
   
   const bool& lEBin =
@@ -395,6 +405,7 @@ void EffPurFromHistos::check () {
       eBin_d == eBin_ni   &&
       eBin_d == eBin_dus  &&
       eBin_d == eBin_dusg &&
+      eBin_d == eBin_cdusg &&
       eBin_d == eBin_bb      );
 
   if ( !lEBin ) {
@@ -416,11 +427,12 @@ void EffPurFromHistos::compute ()
        EffFlavVsBEff_g = 0; 
        EffFlavVsBEff_ni = 0; 
        EffFlavVsBEff_dus = 0; 
-       EffFlavVsBEff_dusg = 0; 
-       EffFlavVsBEff_bb = 0;
+       EffFlavVsBEff_dusg = 0;
        EffFlavVsBBEff_b = 0;
        EffFlavVsBBEff_bb = 0;
-    return; 
+       EffFlavVsBBEff_dusg = 0;
+       EffFlavVsBBEff_cdusg = 0;
+       return; 
  
   }
  
@@ -441,9 +453,11 @@ void EffPurFromHistos::compute ()
   EffFlavVsBEff_g    = (prov.book1D ( hB + "G"    + hE , hB + "G"    + hE , nBinOutput , startOutput , endOutput )) ;
   EffFlavVsBEff_ni   = (prov.book1D ( hB + "NI"   + hE , hB + "NI"   + hE , nBinOutput , startOutput , endOutput )) ;
   EffFlavVsBEff_dus  = (prov.book1D ( hB + "DUS"  + hE , hB + "DUS"  + hE , nBinOutput , startOutput , endOutput )) ;
-  EffFlavVsBEff_dusg = (prov.book1D ( hB + "DUSG" + hE , hB + "DUSG" + hE , nBinOutput , startOutput , endOutput )) ;   EffFlavVsBEff_bb   = (prov.book1D ( hB + "BB"   + hE , hB + "BB"   + hE , nBinOutput , startOutput , endOutput )) ;
+  EffFlavVsBEff_dusg = (prov.book1D ( hB + "DUSG" + hE , hB + "DUSG" + hE , nBinOutput , startOutput , endOutput )) ;   
   EffFlavVsBBEff_b   = (prov.book1D ( "FlavEffVsBBEff_B"     + hE , "FlavEffVsBBEff_B"    + hE , nBinOutput , startOutput , endOutput )) ;
   EffFlavVsBBEff_bb  = (prov.book1D ( "FlavEffVsBBEff_BB"    + hE , "FlavEffVsBBEff_BB"   + hE , nBinOutput , startOutput , endOutput )) ;
+  EffFlavVsBBEff_dusg= (prov.book1D ( "FlavEffVsBBEff_DUSG"  + hE , "FlavEffVsBBEff_DUSG" + hE , nBinOutput , startOutput , endOutput )) ;
+  EffFlavVsBBEff_cdusg= (prov.book1D ( "FlavEffVsBBEff_CDUSG"  + hE , "FlavEffVsBBEff_CDUSG" + hE , nBinOutput , startOutput , endOutput )) ;
   
   EffFlavVsBEff_d->getTH1F()->SetXTitle ( "b-jet efficiency" );
   EffFlavVsBEff_d->getTH1F()->SetYTitle ( "non b-jet efficiency" );
@@ -481,10 +495,7 @@ void EffPurFromHistos::compute ()
   EffFlavVsBEff_dusg->getTH1F()->SetYTitle ( "non b-jet efficiency" );
   EffFlavVsBEff_dusg->getTH1F()->GetXaxis()->SetTitleOffset ( 0.75 );
   EffFlavVsBEff_dusg->getTH1F()->GetYaxis()->SetTitleOffset ( 0.75 );
-  EffFlavVsBEff_bb->getTH1F()->SetXTitle ( "b-jet efficiency" );
-  EffFlavVsBEff_bb->getTH1F()->SetYTitle ( "bb-jet efficiency" );
-  EffFlavVsBEff_bb->getTH1F()->GetXaxis()->SetTitleOffset ( 0.75 );
-  EffFlavVsBEff_bb->getTH1F()->GetYaxis()->SetTitleOffset ( 0.75 );
+
   EffFlavVsBBEff_b->getTH1F()->SetYTitle ( "b-jet efficiency" );
   EffFlavVsBBEff_b->getTH1F()->SetXTitle ( "bb-jet efficiency" );
   EffFlavVsBBEff_b->getTH1F()->GetXaxis()->SetTitleOffset ( 0.75 );
@@ -492,14 +503,25 @@ void EffPurFromHistos::compute ()
   EffFlavVsBBEff_bb->getTH1F()->SetYTitle ( "bb-jet efficiency" );
   EffFlavVsBBEff_bb->getTH1F()->SetXTitle ( "bb-jet efficiency" );
   EffFlavVsBBEff_bb->getTH1F()->GetXaxis()->SetTitleOffset ( 0.75 );
-  EffFlavVsBBEff_bb->getTH1F()->GetYaxis()->SetTitleOffset ( 0.75 );
+  EffFlavVsBBEff_bb->getTH1F()->GetYaxis()->SetTitleOffset ( 0.75 ); 
+  EffFlavVsBBEff_dusg->getTH1F()->SetYTitle ( "non b-jet efficiency" );
+  EffFlavVsBBEff_dusg->getTH1F()->SetXTitle ( "bb-jet efficiency" );
+  EffFlavVsBBEff_dusg->getTH1F()->GetXaxis()->SetTitleOffset ( 0.75 );
+  EffFlavVsBBEff_dusg->getTH1F()->GetYaxis()->SetTitleOffset ( 0.75 );
+  EffFlavVsBBEff_cdusg->getTH1F()->SetYTitle ( "non b-jet efficiency" );
+  EffFlavVsBBEff_cdusg->getTH1F()->SetXTitle ( "bb-jet efficiency" );
+  EffFlavVsBBEff_cdusg->getTH1F()->GetXaxis()->SetTitleOffset ( 0.75 );
+  EffFlavVsBBEff_cdusg->getTH1F()->GetYaxis()->SetTitleOffset ( 0.75 );
   // loop over eff. vs. discriminator cut b-histo and look in which bin the closest entry is;
   // use fact that eff decreases monotonously
 
   // any of the histos to be created can be taken here:
-  MonitorElement * EffFlavVsBEff = EffFlavVsBEff_bb;
-
+  MonitorElement * EffFlavVsBEff = EffFlavVsBEff_b;
+  MonitorElement * EffFlavVsBBEff= EffFlavVsBBEff_bb;
+  
   const int& nBinB = EffFlavVsBEff->getTH1F()->GetNbinsX();
+  const int& nBinBB = EffFlavVsBBEff->getTH1F()->GetNbinsX();
+  
 
   for ( int iBinB = 1; iBinB <= nBinB; iBinB++ ) {  // loop over the bins on the x-axis of the histograms to be filled
 
@@ -522,9 +544,6 @@ void EffPurFromHistos::compute ()
       EffFlavVsBEff_ni   -> Fill ( effBMid , effVersusDiscr_ni  ->GetBinContent ( binClosest ) );
       EffFlavVsBEff_dus  -> Fill ( effBMid , effVersusDiscr_dus ->GetBinContent ( binClosest ) );
       EffFlavVsBEff_dusg -> Fill ( effBMid , effVersusDiscr_dusg->GetBinContent ( binClosest ) );
-      EffFlavVsBEff_bb   -> Fill ( effBMid , effVersusDiscr_b	->GetBinContent ( binClosest ) );
-      EffFlavVsBBEff_b   -> Fill ( effBMid , effVersusDiscr_b	->GetBinContent ( binClosest ) );
-      EffFlavVsBBEff_bb  -> Fill ( effBMid , effVersusDiscr_bb	->GetBinContent ( binClosest ) );
       
       EffFlavVsBEff_d  ->getTH1F()  -> SetBinError ( iBinB , effVersusDiscr_d   ->GetBinError ( binClosest ) );
       EffFlavVsBEff_u  ->getTH1F()  -> SetBinError ( iBinB , effVersusDiscr_u   ->GetBinError ( binClosest ) );
@@ -535,9 +554,8 @@ void EffPurFromHistos::compute ()
       EffFlavVsBEff_ni ->getTH1F()  -> SetBinError ( iBinB , effVersusDiscr_ni  ->GetBinError ( binClosest ) );
       EffFlavVsBEff_dus->getTH1F()  -> SetBinError ( iBinB , effVersusDiscr_dus ->GetBinError ( binClosest ) );
       EffFlavVsBEff_dusg->getTH1F() -> SetBinError ( iBinB , effVersusDiscr_dusg->GetBinError ( binClosest ) );
-      EffFlavVsBEff_bb->getTH1F()   -> SetBinError ( iBinB , effVersusDiscr_b   ->GetBinError ( binClosest ) );
-      EffFlavVsBBEff_b->getTH1F()   -> SetBinError ( iBinB , effVersusDiscr_b   ->GetBinError ( binClosest ) );
-      EffFlavVsBBEff_bb->getTH1F()  -> SetBinError ( iBinB , effVersusDiscr_bb   ->GetBinError ( binClosest ) );  
+  
+      
     }
     else {
       //CW      cout << "Did not find right bin for b-efficiency : " << effBMid << endl;
@@ -545,6 +563,34 @@ void EffPurFromHistos::compute ()
     
   }
   
+
+// Fill histograms for BBplots
+  for ( int iBinBB = 1; iBinBB <= nBinBB; iBinBB++ ) {  
+
+    const float& effBBBinWidth = EffFlavVsBBEff->getTH1F()->GetBinWidth  ( iBinBB );
+    const float& effBBMid      = EffFlavVsBBEff->getTH1F()->GetBinCenter ( iBinBB ); 
+    const float& effBBLeft     = effBBMid - 0.5*effBBBinWidth;             
+    const float& effBBRight    = effBBMid + 0.5*effBBBinWidth;              
+
+    const int&   BBbinClosest = findBinClosestYValue ( effVersusDiscr_bb , effBBMid , effBBLeft , effBBRight );
+    const bool&  BBbinFound   = ( BBbinClosest > 0 ) ;
+    //
+    if ( BBbinFound ) {
+      
+      EffFlavVsBBEff_b   -> Fill ( effBBMid , effVersusDiscr_b	->GetBinContent ( BBbinClosest ) );
+      EffFlavVsBBEff_bb  -> Fill ( effBBMid , effVersusDiscr_bb	->GetBinContent ( BBbinClosest ) );
+      EffFlavVsBBEff_dusg-> Fill ( effBBMid , effVersusDiscr_dusg->GetBinContent ( BBbinClosest ) );
+      EffFlavVsBBEff_cdusg-> Fill( effBBMid , effVersusDiscr_cdusg->GetBinContent ( BBbinClosest ) );
+  
+      EffFlavVsBBEff_b->getTH1F()   -> SetBinError ( iBinBB , effVersusDiscr_b   ->GetBinError ( BBbinClosest ) );
+      EffFlavVsBBEff_bb->getTH1F()  -> SetBinError ( iBinBB , effVersusDiscr_bb   ->GetBinError ( BBbinClosest ) );
+      EffFlavVsBBEff_dusg->getTH1F()-> SetBinError ( iBinBB , effVersusDiscr_dusg ->GetBinError ( BBbinClosest ) );
+      EffFlavVsBBEff_cdusg->getTH1F()-> SetBinError ( iBinBB , effVersusDiscr_cdusg ->GetBinError ( BBbinClosest ) );
+    }
+    else {
+    }
+    
+  }
 }
 
 

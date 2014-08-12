@@ -44,6 +44,7 @@ namespace RecoBTag {
   bool flavourIsG ( const int & flav )    ;
   bool flavourIsDUS  ( const int & flav ) ;
   bool flavourIsDUSG ( const int & flav ) ;
+  bool flavourIsCDUSG ( const int & flav ) ;
   bool flavourIsBB   ( const int & flav ) ;
   bool flavourIsNI  ( const int & flav )  ;
 
