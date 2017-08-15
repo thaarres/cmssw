@@ -56,16 +56,27 @@ float ECFAdder::getECF(unsigned index, const edm::Ptr<reco::Jet> & object) const
   for (unsigned k = 0; k < object->numberOfDaughters(); ++k)
     {
       const reco::CandidatePtr & dp = object->daughterPtr(k);
-      if ( dp.isNonnull() && dp.isAvailable() )
-	FJparticles.push_back( fastjet::PseudoJet( dp->px(), dp->py(), dp->pz(), dp->energy() ) );
+      if ( dp.isNonnull() && dp.isAvailable() ){
+
+	// Here, the daughters are the "end" node, so this is a PFJet
+	if ( dp->numberOfDaughters() == 0 ) {
+	  FJparticles.push_back( fastjet::PseudoJet( dp->px(), dp->py(), dp->pz(), dp->energy() ) );
+	} else { // Otherwise, this is a BasicJet, so you need to descend further.
+	  auto subjet = dynamic_cast<reco::Jet const * >( dp.get() );
+	  for ( unsigned l = 0; l < subjet->numberOfDaughters(); ++l ) {
+	    if ( subjet != 0 ) {
+	      const reco::CandidatePtr & ddp = subjet->daughterPtr(l);
+	      FJparticles.push_back( fastjet::PseudoJet( ddp->px(), ddp->py(), ddp->pz(), ddp->energy() ) );	      
+	    } else {
+	      edm::LogWarning("MissingJetConstituent") << "BasicJet constituent required for ECF computation is missing!";
+	    }
+	  }
+	} // end if basic jet
+      } // end if daughter pointer is nonnull and available
       else
 	edm::LogWarning("MissingJetConstituent") << "Jet constituent required for ECF computation is missing!";
     }
-    fastjet::JetDefinition jetDef(fastjet::antikt_algorithm, 999);
-    fastjet::ClusterSequence thisClustering_basic(FJparticles, jetDef);
-    std::vector<fastjet::PseudoJet> out_jets_basic = thisClustering_basic.inclusive_jets(0);
-    if(out_jets_basic.size()!=1) return -1;
-  return routine_[index]->result(out_jets_basic[0]); 
+    return routine_[index]->result(join(FJparticles)); 
 }
 
 
