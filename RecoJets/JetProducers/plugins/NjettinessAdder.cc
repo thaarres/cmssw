@@ -110,25 +110,34 @@ void NjettinessAdder::produce(edm::Event & iEvent, const edm::EventSetup & iSetu
 float NjettinessAdder::getTau(unsigned num, const edm::Ptr<reco::Jet> & object) const
 {
   std::vector<fastjet::PseudoJet> FJparticles;
+
   for (unsigned k = 0; k < object->numberOfDaughters(); ++k)
-  {
-    const reco::CandidatePtr & dp = object->daughterPtr(k);
-    if ( dp.isNonnull() && dp.isAvailable() ){
-      if ( dp->numberOfDaughters() > 0 ){ //Additional loop for running on MINIAOD, where daughters of SoftDropped jet returns softdrop subjets
-        for (unsigned l = 0; l < dp->numberOfDaughters(); ++l)
-        {
-          const reco::Candidate * ddp = dp->daughter(l);
-          FJparticles.push_back( fastjet::PseudoJet( ddp->px(), ddp->py(), ddp->pz(), ddp->energy() ) );
-        }
-      }
+    {
+      const reco::CandidatePtr & dp = object->daughterPtr(k);
+      if ( dp.isNonnull() && dp.isAvailable() ){
+	if ( dp->numberOfDaughters() == 0 ) {
+	  FJparticles.push_back( fastjet::PseudoJet( dp->px(), dp->py(), dp->pz(), dp->energy() ) );
+	} else { // Otherwise, this is a BasicJet, so you need to descend further.
+	  auto subjet = dynamic_cast<reco::Jet const * >( dp.get() );
+	  for ( unsigned l = 0; l < subjet->numberOfDaughters(); ++l ) {
+	    if ( subjet != 0 ) {
+	      const reco::CandidatePtr & ddp = subjet->daughterPtr(l);
+	      FJparticles.push_back( fastjet::PseudoJet( ddp->px(), ddp->py(), ddp->pz(), ddp->energy() ) );	      
+	    } else {
+	     edm::LogWarning("MissingJetConstituent") << "Jet constituent required for N-subjettiness computation is missing!";
+	    }
+	  }
+	} 
+      } 
       else
-        FJparticles.push_back( fastjet::PseudoJet( dp->px(), dp->py(), dp->pz(), dp->energy() ) );   
+	edm::LogWarning("MissingJetConstituent") << "Jet constituent required for N-subjettiness computation is missing!";
     }
-    else
-      edm::LogWarning("MissingJetConstituent") << "Jet constituent required for N-subjettiness computation is missing!";
-  }
-  return routine_->getTau(num, FJparticles); 
+    return routine_->getTau(num, FJparticles); 
 }
+
+
+
+
 
 
 
