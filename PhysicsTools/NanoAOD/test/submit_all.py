@@ -24,7 +24,7 @@ def getOptions() :
     parser.add_option("-f", "--datasets", dest="datasets",
         help=("File listing datasets to run over"),
         metavar="FILE")
-    parser.add_option("-s", "--storageSite", dest="storageSite", default="T3_US_FNALLPC",
+    parser.add_option("-s", "--storageSite", dest="storageSite", default="T3_CH_PSI",
         help=("Site"),
         metavar="SITE")
     parser.add_option("-l", "--lumiMask", dest="lumiMask",
@@ -100,7 +100,7 @@ def main():
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
         datatier = job.split('/')[3]
-        requestname = ptbin + '_' + cond
+        requestname = ptbin + '_singleMu_' + cond
         if len(requestname) > 100: requestname = ''.join((requestname[:100-len(requestname)]).split('_')[:-1])
         print 'requestname = ', requestname
         config.General.requestName = requestname
